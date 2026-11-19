@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seasonal Illustrations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f7f6f4;--ink:#16141f;--muted:#6d6a78;--line:#e7e4ec;--tile:#efedea;--tileDark:#17161f}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  button{font:inherit;color:inherit}
+  .app{display:grid;grid-template-columns:268px 1fr;min-height:100vh}
+  aside{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid var(--line);padding:24px 20px;display:flex;flex-direction:column;gap:26px;overflow-y:auto}
+  .logo{font-weight:700;font-size:15px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .logo i{width:28px;height:28px;border-radius:9px;background:var(--ink);display:grid;place-items:center}
+  .logo i svg{width:15px;height:15px}
+  .label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;display:block}
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .swatch{aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+  .swatch.on::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--ink)}
+  .hexrow{display:flex;gap:8px;margin-top:14px}
+  .hexrow input[type=text]{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:500 13px ui-monospace,Menlo,monospace;text-transform:uppercase;background:#fff}
+  .hexrow input[type=color]{width:40px;height:38px;border:1px solid var(--line);border-radius:10px;padding:3px;background:#fff;cursor:pointer}
+  .roles{margin-top:14px;display:grid;gap:6px}
+  .role{display:flex;align-items:center;gap:8px;font:500 12px ui-monospace,Menlo,monospace;color:var(--muted)}
+  .role i{width:18px;height:18px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);flex:none}
+  .seg{display:inline-flex;background:#f0eef3;border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+  .seg button{border:0;background:none;padding:6px 13px;border-radius:8px;cursor:pointer;font-weight:500;font-size:13px;color:var(--muted)}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(22,20,31,.14)}
+  select{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;font:inherit;width:100%;margin-top:10px}
+  .switch{display:flex;align-items:center;justify-content:space-between;font-weight:500;margin-bottom:12px}
+  .switch input{appearance:none;width:38px;height:22px;border-radius:99px;background:#d8d5df;position:relative;cursor:pointer;transition:.2s;flex:none}
+  .switch input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .switch input:checked{background:var(--ink)}
+  .switch input:checked::after{left:19px}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+  main{padding:32px 40px 120px;min-width:0}
+  h1{margin:0;font-size:28px;line-height:1.15;letter-spacing:-.025em;font-weight:700}
+  h2{margin:0;font-size:18px;letter-spacing:-.015em}
+  .lede{margin:6px 0 0;color:var(--muted);max-width:560px}
+  .row2{display:flex;gap:12px;margin-top:24px;align-items:center;flex-wrap:wrap}
+  .search{flex:0 0 100%;position:relative;max-width:420px}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+  .search input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px 11px 40px;font:inherit}
+  .search input:focus,.hexrow input:focus{outline:2px solid var(--ink);outline-offset:1px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font-weight:500;font-size:13px;cursor:pointer;color:#3a3750}
+  .chip:hover{border-color:#c9c5d6}
+  .chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chip small{opacity:.55;margin-left:4px}
+  .bar{display:flex;justify-content:space-between;align-items:center;margin:24px 0 16px;color:var(--muted);font-size:13px}
+  .bar button{border:0;background:none;cursor:pointer;color:var(--ink);font-weight:600;padding:0}
+
+  #grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px}
+  .item{min-width:0}
+  .tile{background:var(--tile);border-radius:20px;aspect-ratio:1;display:grid;place-items:center;position:relative;cursor:pointer;transition:transform .2s,box-shadow .2s}
+  .tile svg{width:86%;height:86%;display:block;overflow:visible}
+  .tile:hover{transform:translateY(-2px)}
+  .item.sel .tile{box-shadow:0 0 0 3px var(--bg),0 0 0 5.5px var(--ink)}
+  .bg-dark .tile{background:var(--tileDark)}
+  .bg-check .tile{background:repeating-conic-gradient(#e4e2e8 0 25%,#fff 0 50%) 0 0/20px 20px}
+  .check{position:absolute;top:14px;left:14px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.92);border:1.5px solid rgba(22,20,31,.2);display:grid;place-items:center;opacity:0;transition:.15s}
+  .check svg{width:14px;height:14px;opacity:0}
+  .tile:hover .check{opacity:1}
+  .item.sel .check{opacity:1;background:var(--ink);border-color:var(--ink)}
+  .item.sel .check svg{opacity:1}
+  .acts{position:absolute;top:14px;right:14px;display:flex;gap:6px;opacity:0;transform:translateY(-4px);transition:.15s}
+  .tile:hover .acts,.tile:focus-within .acts{opacity:1;transform:none}
+  .acts button{width:32px;height:32px;border-radius:50%;border:0;background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(22,20,31,.2);cursor:pointer;display:grid;place-items:center}
+  .acts button:hover{background:var(--ink);color:#fff}
+  .acts svg{width:15px;height:15px}
+  .cap{padding:12px 4px 0;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .cap b{font-weight:600}
+  .cap span{color:var(--muted);font-size:12px}
+  .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:80px 0}
+
+  .sizes{margin-top:64px}
+  .panels{display:grid;grid-template-columns:1fr;gap:20px;margin-top:18px}
+  .panel{border-radius:22px;padding:28px 30px 30px}
+  .panel.light{background:#fbfaf8;box-shadow:inset 0 0 0 1px var(--line)}
+  .panel.dark{background:#14131b;color:#e9e7f0}
+  .panel h3{margin:0 0 18px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.6}
+  .srow{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;padding:14px 0}
+  .srow + .srow{border-top:1px solid rgba(128,128,140,.2)}
+  .srow figure{margin:0;display:grid;gap:8px;justify-items:center;font-size:11px;opacity:.95}
+  .srow figcaption{opacity:.55}
+  .srow .tag{width:70px;font-size:11px;opacity:.5;align-self:center}
+
+  .dock{position:fixed;left:calc(268px + (100vw - 268px)/2);bottom:24px;transform:translate(-50%,120px);opacity:0;pointer-events:none;transition:.25s;background:var(--ink);color:#fff;border-radius:18px;padding:10px 10px 10px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 20px 40px -12px rgba(22,20,31,.5);z-index:10}
+  .dock.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+  .dock .n{font-weight:600}
+  .dock .clear{background:none;border:0;color:#bdb9cf;cursor:pointer}
+  .dock .go{background:#fff;color:var(--ink);border:0;border-radius:12px;padding:10px 18px;font-weight:600;cursor:pointer}
+  .toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;box-shadow:0 10px 30px -10px rgba(22,20,31,.3);font-weight:500;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+  .toast.show{opacity:1}
+  @media (max-width:1100px){#grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:860px){
+    .app{grid-template-columns:1fr}
+    aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+    main{padding:24px 18px 120px}
+    .dock{left:50%}
+    .acts,.check{opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="logo"><i><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 15.3 6.7 18.4l1.2-6L3.4 8.3l6-.7z"/></svg></i>Seasonal</div>
+
+    <div>
+      <span class="label">Style</span>
+      <label class="switch"><span>Cast shadow</span><input type="checkbox" id="shadow" checked></label>
+      <label class="switch" style="margin-bottom:0"><span>Material texture</span><input type="checkbox" id="texture" checked></label>
+    </div>
+
+    <div>
+      <span class="label">Brand colour</span>
+      <div class="swatches" id="swatches"></div>
+      <div class="hexrow"><input type="text" id="hex" maxlength="7" spellcheck="false"><input type="color" id="picker"></div>
+      <div class="roles" id="roles"></div>
+    </div>
+
+    <div>
+      <span class="label">Background preview</span>
+      <div class="seg" id="bgsw"></div>
+    </div>
+
+    <div>
+      <span class="label">Export</span>
+      <div class="seg" id="fmt"></div>
+      <select id="size" aria-label="Size"><option value="256">256 px</option><option value="512" selected>512 px</option><option value="1024">1024 px</option><option value="2048">2048 px</option></select>
+      <span class="label" style="margin-top:16px">SVG colours</span>
+      <div class="seg" id="mode"></div>
+      <div class="note" id="modenote"></div>
+      <div class="note">Backgrounds are always transparent.</div>
+    </div>
+  </aside>
+
+  <main>
+    <h1>Seasonal illustrations</h1>
+    <p class="lede" id="lede">Christmas illustrations. Each SVG uses named colour roles, so one brand colour re-themes the artwork while the materials stay fixed.</p>
+
+    <div class="row2">
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" id="q" placeholder="Search hat, tree, wreath…"></div>
+      <div class="chips" id="cats"></div>
+    </div>
+
+    <div class="bar"><span id="count"></span><button id="selAll">Select all</button></div>
+    <div id="grid"></div>
+
+    <section class="sizes">
+      <h2>Size check</h2>
+      <p class="lede">The same artwork at sizes used on real pages: hero, card and inline. Light and dark backgrounds.</p>
+      <div class="panels" id="panels"></div>
+    </section>
+  </main>
+</div>
+
+<div class="dock" id="dock"><span class="n" id="dn"></span><button class="clear" id="dclear">Clear</button><button class="go" id="dl"></button></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* =====================================================================
+   COLOUR ROLES
+   brand-accent / accent-light / accent-dark follow the chosen brand colour.
+   Everything else is a fixed material colour.
+===================================================================== */
+const $ = s => document.querySelector(s);
+const PI = Math.PI, rad = d => d*PI/180;
+const hexRGB = h => { h=h.replace('#',''); return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)); };
+const mix = (a,b,t) => { const A=hexRGB(a),B=hexRGB(b); return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join(''); };
+function palette(brand){
+  return {
+    'brand-accent':brand,
+    'accent-light':mix(brand,'#fff4e6',.34),
+    'accent-dark':mix(brand,'#1c0a14',.42),
+    'pine-deep':'#14352a','pine-base':'#1f5640','pine-mid':'#2c6f52','pine-light':'#5a9a79',
+    'wool-highlight':'#fffdf8','wool-white':'#f6f0e6','wool-shade':'#dcd1bf','wool-deep':'#bdb099',
+    'brass-dark':'#94661f','brass-base':'#cc9c42','brass-light':'#f1d58f',
+    'wood-dark':'#573d2c','wood-base':'#83603f','wood-light':'#ae8559',
+    'fur-dark':'#6c4630','fur-base':'#a0724b','fur-light':'#c89b6e','fur-cream':'#ecd8bb',
+    'antler-dark':'#76603f','antler-base':'#b09470','antler-light':'#dcc6a2',
+    'kraft':'#c7a374','kraft-dark':'#a4804f',
+    'snow-white':'#f8fbfe','snow-shade':'#c7d4e4','snow-deep':'#8fa3c0','carrot-light':'#f6a35c','carrot-base':'#e8782c','carrot-dark':'#b04a17','ink-light':'#3b3760','ginger-light':'#d79a58','ginger-base':'#b2713a','ginger-dark':'#7d4723','mist-light':'#a9c47a','mist-base':'#74994f','mist-dark':'#456a3a',
+    'ink':'#1b1830'
+  };
+}
+/* generator context passed to every asset */
+function makeG(prefix,pal,mode,opts){
+  const used=new Set();
+  const G={pal,opts,used};
+  G.id=n=>prefix?`${prefix}-${n}`:n;
+  G.f=(r,extra='')=>{used.add(r);return `fill="${pal[r]}" class="${r}"${mode==='vars'?` style="fill:var(--${r})"`:''}${extra?' '+extra:''}`};
+  G.s=(r,w,extra='')=>{used.add(r);return `fill="none" stroke="${pal[r]}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" class="${r}"${mode==='vars'?` style="stroke:var(--${r})"`:''}${extra?' '+extra:''}`};
+  G.stop=(o,r,op)=>{used.add(r);return `<stop offset="${o}" stop-color="${pal[r]}"${op!=null?` stop-opacity="${op}"`:''} class="${r}"${mode==='vars'?` style="stop-color:var(--${r})"`:''}/>`};
+  G.lg=(n,x1,y1,x2,y2,st)=>`<linearGradient id="${G.id(n)}" gradientUnits="userSpaceOnUse" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">${st.map(a=>G.stop(...a)).join('')}</linearGradient>`;
+  G.rg=(n,cx,cy,r,st,fx,fy)=>`<radialGradient id="${G.id(n)}" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${r}"${fx!=null?` fx="${fx}" fy="${fy}"`:''}>${st.map(a=>G.stop(...a)).join('')}</radialGradient>`;
+  G.u=n=>`url(#${G.id(n)})`;
+  G.blurDef=()=>`<filter id="${G.id('blur')}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>`;
+  G.clip=(n,d)=>`<clipPath id="${G.id(n)}"><path d="${d}"/></clipPath>`;
+  return G;
+}
+const rngf=seed=>{let t=seed>>>0;return()=>{t+=0x6D2B79F5;let r=Math.imul(t^t>>>15,1|t);r^=r+Math.imul(r^r>>>7,61|r);return((r^r>>>14)>>>0)/4294967296}};
+const n1=v=>(+v).toFixed(1);
+const pts=a=>a.map(p=>n1(p[0])+' '+n1(p[1]));
+const poly=a=>'M'+pts(a).join('L')+'Z';
+const cub=(P,t)=>{const u=1-t;return[u*u*u*P[0][0]+3*u*u*t*P[1][0]+3*u*t*t*P[2][0]+t*t*t*P[3][0],u*u*u*P[0][1]+3*u*u*t*P[1][1]+3*u*t*t*P[2][1]+t*t*t*P[3][1]]};
+const cubd=(P,t)=>{const u=1-t;return[3*u*u*(P[1][0]-P[0][0])+6*u*t*(P[2][0]-P[1][0])+3*t*t*(P[3][0]-P[2][0]),3*u*u*(P[1][1]-P[0][1])+6*u*t*(P[2][1]-P[1][1])+3*t*t*(P[3][1]-P[2][1])]};
+/* tapered tube along a cubic, with light (upper-left) and shade (lower-right) bands */
+function tube(P,w0,w1,n=28){
+  const E=(o0,o1)=>{const a=[],b=[];for(let i=0;i<=n;i++){const t=i/n,p=cub(P,t),d=cubd(P,t),l=Math.hypot(d[0],d[1])||1,lx=d[1]/l,ly=-d[0]/l,w=(w0+(w1-w0)*t)/2;a.push([p[0]+lx*w*o0,p[1]+ly*w*o0]);b.push([p[0]+lx*w*o1,p[1]+ly*w*o1])}return poly([...a,...b.reverse()])};
+  const end=cub(P,1),r1=w1/2;
+  return {body:E(1,-1)+`M${n1(end[0]+r1)} ${n1(end[1])}a${n1(r1)} ${n1(r1)} 0 1 0 ${n1(-2*r1)} 0a${n1(r1)} ${n1(r1)} 0 1 0 ${n1(2*r1)} 0Z`,hi:E(.9,.3),lo:E(-.3,-.9)};
+}
+function branch(P,t,ang,len,bend){
+  const p=cub(P,t),d=cubd(P,t),a=Math.atan2(d[1],d[0])+rad(ang),a2=a+rad(bend);
+  const u=[Math.cos(a),Math.sin(a)],v=[Math.cos(a2),Math.sin(a2)];
+  return [p,[p[0]+u[0]*len*.35,p[1]+u[1]*len*.35],[p[0]+u[0]*len*.62+v[0]*len*.12,p[1]+u[1]*len*.62+v[1]*len*.12],[p[0]+v[0]*len,p[1]+v[1]*len]];
+}
+/* fluffy wool shapes */
+function fluffBand(x0,x1,y0,y1,n,amp,seed,curve){
+  const r=rngf(seed),h=(y1-y0)/2,top=x=>y0+curve*Math.sin(PI*(x-x0)/(x1-x0)),bot=x=>y1+curve*Math.sin(PI*(x-x0)/(x1-x0)),m0=(y0+y1)/2;
+  let d=`M${x0} ${m0}Q${x0} ${n1(top(x0+h))} ${x0+h} ${n1(top(x0+h))}`;
+  const xa=x0+h,xb=x1-h,st=(xb-xa)/n;
+  for(let i=0;i<n;i++){const xm=xa+st*(i+.5),xe=xa+st*(i+1);d+=`Q${n1(xm)} ${n1(top(xm)-amp*(.7+.8*r()))} ${n1(xe)} ${n1(top(xe))}`}
+  d+=`Q${x1} ${n1(top(xb))} ${x1} ${m0}Q${x1} ${n1(bot(xb))} ${xb} ${n1(bot(xb))}`;
+  for(let i=0;i<n;i++){const xm=xb-st*(i+.5),xe=xb-st*(i+1);d+=`Q${n1(xm)} ${n1(bot(xm)+amp*(.7+.8*r()))} ${n1(xe)} ${n1(bot(xe))}`}
+  return d+`Q${x0} ${n1(bot(xa))} ${x0} ${m0}Z`;
+}
+function fluffRing(cx,cy,R,n,amp,seed){
+  const r=rngf(seed);let d='';
+  for(let i=0;i<n;i++){const a0=i/n*2*PI,a1=(i+1)/n*2*PI,am=(a0+a1)/2,k=1+amp*(.6+.9*r())/R;
+    const p0=[cx+R*Math.cos(a0),cy+R*Math.sin(a0)],p1=[cx+R*Math.cos(a1),cy+R*Math.sin(a1)],c=[cx+R*k*1.04*Math.cos(am),cy+R*k*1.04*Math.sin(am)];
+    d+=(i?'':`M${n1(p0[0])} ${n1(p0[1])}`)+`Q${n1(c[0])} ${n1(c[1])} ${n1(p1[0])} ${n1(p1[1])}`}
+  return d+'Z';
+}
+function fibres(g,n,x0,y0,x1,y1,seed,role,op,len=14){
+  const r=rngf(seed);let d='';
+  for(let i=0;i<n;i++){const x=x0+(x1-x0)*r(),y=y0+(y1-y0)*r(),a=r()*PI*2,l=len*(.5+r());d+=`M${n1(x)} ${n1(y)}q${n1(Math.cos(a)*l*.5+Math.sin(a)*3)} ${n1(Math.sin(a)*l*.5-Math.cos(a)*3)} ${n1(Math.cos(a)*l)} ${n1(Math.sin(a)*l)}`}
+  return `<path d="${d}" ${g.s(role,1.6,`opacity="${op}"`)}/>`;
+}
+function furFlow(g,seed,x0,y0,x1,y1,step,role,op,w){
+  const r=rngf(seed);let d='';
+  for(let y=y0;y<y1;y+=step)for(let x=x0;x<x1;x+=step){const px=x+(r()-.5)*step,py=y+(r()-.5)*step,a=rad(58+(px-250)*.05+(r()-.5)*26),L=6+r()*5;
+    d+=`M${n1(px)} ${n1(py)}q${n1(Math.cos(a)*L*.5+1.4)} ${n1(Math.sin(a)*L*.5)} ${n1(Math.cos(a)*L)} ${n1(Math.sin(a)*L)}`}
+  return `<path d="${d}" ${g.s(role,w,`opacity="${op}"`)}/>`;
+}
+function woolTex(g,n,x0,y0,x1,y1,seed,op){const r=rngf(seed);let d='';for(let i=0;i<n;i++){const x=x0+(x1-x0)*r(),y=y0+(y1-y0)*r(),l=4+r()*4,f=r()>.5?1:-1;d+=`M${n1(x)} ${n1(y)}q${n1(l*.5*f)} ${n1(-l*.8)} ${n1(l*f)} ${n1(-l*.1)}`}return `<path d="${d}" ${g.s('wool-deep',1.5,`opacity="${op}"`)}/>`}
+/* glass-like ball used for tree baubles */
+const BALL={'brand-accent':['accent-light','brand-accent','accent-dark'],'brass-base':['brass-light','brass-base','brass-dark'],'accent-dark':['brand-accent','accent-dark','accent-dark'],'wool-white':['wool-highlight','wool-white','wool-deep']};
+function ball(g,n,cx,cy,r,role){
+  const [a,b,c]=BALL[role];
+  return `<defs>${g.rg('bl'+n,cx-r*.35,cy-r*.4,r*1.6,[[0,a],[.5,b],[1,c]])}</defs>
+  <rect x="${n1(cx-r*.22)}" y="${n1(cy-r-r*.34)}" width="${n1(r*.44)}" height="${n1(r*.4)}" rx="1.5" ${g.f('brass-base')}/>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="${g.u('bl'+n)}"/>
+  <path d="M${n1(cx-r*.66)} ${n1(cy-r*.12)}A${n1(r*.7)} ${n1(r*.7)} 0 0 1 ${n1(cx-r*.1)} ${n1(cy-r*.68)}" ${g.s('wool-highlight',Math.max(1.6,r*.12),'opacity=".7"')}/>`;
+}
+/* satin ribbon bow; roles = [base, dark, light] */
+function bow(g,cx,cy,sc,rot,R,seed=1){
+  const [B,D,L]=R;
+  return `<g transform="translate(${cx} ${cy}) rotate(${rot}) scale(${sc})">
+   <path d="M-6 8C-22 54 -48 100 -78 138L-50 134L-36 158C-22 112 -4 66 8 20Z" ${g.f(D)}/>
+   <path d="M6 8C22 50 42 92 70 126L44 126L34 150C22 106 8 64 -4 20Z" ${g.f(B)}/>
+   <path d="M6 8C22 50 42 92 70 126L44 126L34 150C22 106 8 64 -4 20Z" ${g.f(D,'opacity=".28"')}/>
+   <path d="M0 2C-44 -76 -140 -70 -130 -6C-124 42 -46 36 0 2Z" ${g.f(B)}/>
+   <path d="M-8 0C-44 -52 -108 -50 -104 -10C-100 24 -44 22 -8 0Z" ${g.f(D,'opacity=".55"')}/>
+   <path d="M-112 -28C-100 -46 -76 -52 -52 -40" ${g.s(L,3.4,'opacity=".75"')}/>
+   <path d="M0 2C44 -76 140 -70 130 -6C124 42 46 36 0 2Z" ${g.f(B)}/>
+   <path d="M0 2C44 -76 140 -70 130 -6C124 42 46 36 0 2Z" ${g.f(D,'opacity=".3"')}/>
+   <path d="M8 0C44 -52 108 -50 104 -10C100 24 44 22 8 0Z" ${g.f(D,'opacity=".6"')}/>
+   <path d="M52 -40C76 -50 102 -44 112 -26" ${g.s(L,3.2,'opacity=".5"')}/>
+   <rect x="-19" y="-20" width="38" height="42" rx="13" ${g.f(B)}/>
+   <path d="M2 -20H6A13 13 0 0 1 19 -7V9A13 13 0 0 1 6 22H2Z" ${g.f(D,'opacity=".6"')}/>
+   <path d="M-12 -12Q-12 -2 -9 8" ${g.s(L,3.4,'opacity=".8"')}/></g>`;
+}
+const R_BRAND=['brand-accent','accent-dark','accent-light'],R_CREAM=['wool-white','wool-shade','wool-highlight'];
+function sprigDef(g,name,L,seed,pl){pl=pl||['pine-deep','pine-base','pine-mid','pine-light'];
+  const r=rngf(seed);let back='',mid='',front='',hi='';
+  for(let s=8;s<=L-4;s+=6.2){const ell=(31-.11*s)+r()*5;[-1,1].forEach(sg=>{const J=()=>(r()-.5)*12,A1=rad(sg*(68+J())),A2=rad(sg*(49+J())),A3=rad(sg*(33+J())),y0=s/L*3;
+    back+=`M${n1(s)} ${n1(y0)}l${n1(ell*1.12*Math.cos(A1))} ${n1(ell*1.12*Math.sin(A1))}`;
+    mid+=`M${n1(s)} ${n1(y0)}l${n1(ell*Math.cos(A2))} ${n1(ell*Math.sin(A2))}`;
+    front+=`M${n1(s)} ${n1(y0)}l${n1(ell*.78*Math.cos(A3))} ${n1(ell*.78*Math.sin(A3))}`;
+    if(r()>.55)hi+=`M${n1(s+1)} ${n1(y0)}l${n1(ell*.7*Math.cos(A3*.8))} ${n1(ell*.7*Math.sin(A3*.8))}`})}
+  return `<g id="${g.id(name)}"><path d="M0 0Q${L*.5} -3 ${L} 3" ${g.s('wood-dark',3.6)}/><path d="${back}" ${g.s(pl[0],5)}/><path d="${mid}" ${g.s(pl[1],4.6)}/><path d="${front}" ${g.s(pl[2],4)}/><path d="${hi}" ${g.s(pl[3],2.6,'opacity=".85"')}/></g>`;
+}
+function berry(g,n,cx,cy,r){
+  return `<defs>${g.rg('by'+n,cx-r*.35,cy-r*.4,r*1.7,[[0,'accent-light'],[.5,'brand-accent'],[1,'accent-dark']])}</defs><circle cx="${cx}" cy="${cy}" r="${r}" fill="${g.u('by'+n)}"/><circle cx="${n1(cx-r*.36)}" cy="${n1(cy-r*.4)}" r="${n1(r*.2)}" ${g.f('wool-highlight','opacity=".85"')}/>`;
+}
+function cone(g,x,y,rot,sc){
+  let o=`<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})"><path d="M0 -38C18 -38 26 -14 24 8C22 30 12 44 0 46C-12 44 -22 30 -24 8C-26 -14 -18 -38 0 -38Z" ${g.f('wood-dark')}/>`;
+  const rows=[-30,-19,-8,3,14,25,35];
+  rows.forEach((yy,ri)=>{const wMax=ri<2?1:ri<5?2:1;for(let k=-wMax;k<=wMax;k++){const xx=k*14+(ri%2?7:0);if(Math.abs(xx)>(ri<1?4:ri<2?10:ri<6?22:12))continue;
+    o+=`<path d="M${xx-8} ${yy-2}Q${xx} ${yy+13} ${xx+8} ${yy-2}Q${xx} ${yy-6} ${xx-8} ${yy-2}Z" ${g.f('wood-base')}/><path d="M${xx-7} ${yy-1}Q${xx-3} ${yy+7} ${xx+1} ${yy+8}" ${g.s('wood-light',1.8,'opacity=".85"')}/>`}});
+  return o+`<path d="M0 -38C18 -38 26 -14 24 8C22 30 12 44 0 46C6 20 10 -14 0 -38Z" ${g.f('ink','opacity=".16"')}/></g>`;
+}
+function star5(g,cx,cy,R,r){
+  const P=[];for(let i=0;i<10;i++){const rr=i%2?r:R,a=rad(-90+i*36);P.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)])}
+  let o='';for(let i=0;i<10;i++){const p=P[i],q=P[(i+1)%10],left=(p[0]+q[0]+cx)/3<cx;const role=left?(i%2?'brass-light':'brass-base'):(i%2?'brass-dark':'brass-base');
+    o+=`<path d="M${cx} ${cy}L${n1(p[0])} ${n1(p[1])}L${n1(q[0])} ${n1(q[1])}Z" ${g.f(role)} stroke="${g.pal[role]}" stroke-width="1.5" stroke-linejoin="round"/>`}
+  return o;
+}
+
+/* =====================================================================
+   ASSET 1: SANTA HAT  (480 x 480)
+===================================================================== */
+function drawHat(g){
+  const body='M70 344C62 262 92 176 170 128C238 86 324 90 370 150C400 190 408 246 404 296C392 290 380 274 374 254C364 224 346 204 320 194C332 248 354 308 410 344Z';
+  const trim=fluffBand(50,432,316,396,17,9,11,12), pom=fluffRing(398,306,40,15,6,5);
+  const cl=g.opts.texture;
+  let o=`<defs>${g.clip('hc',body)}${g.clip('tc',trim)}${g.clip('pc',pom)}
+   ${g.lg('hshade',70,100,430,380,[[0,'accent-light',.5],[.4,'accent-light',0],[.66,'accent-dark',0],[1,'accent-dark',.8]])}
+   ${g.lg('tgrad',0,316,0,396,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}
+   ${g.lg('tside',60,0,432,0,[[0,'wool-shade',0],[.7,'wool-shade',.25],[1,'wool-deep',.8]])}
+   ${g.rg('pgrad',376,284,56,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}
+   <pattern id="${g.id('felt')}" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="1.4" cy="1.4" r=".9" ${g.f('accent-dark','opacity=".22"')}/><circle cx="5" cy="5" r=".7" ${g.f('accent-light','opacity=".25"')}/></pattern></defs>`;
+  o+=`<filter id="${g.id('grain')}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .1  0 0 0 0 0  0 0 0 0 .05  0 0 0 -2.2 1.25"/></filter>`;
+  if(g.opts.shadow) o+=`${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})" transform="translate(20 22)" opacity=".2"><path d="${body}" ${g.f('ink')}/><path d="${trim}" ${g.f('ink')}/><path d="${pom}" ${g.f('ink')}/></g>`;
+  o+=`<g id="${g.id('cone')}"><path d="M374 254C364 224 346 204 320 194C332 248 354 308 410 344L404 296C392 290 380 274 374 254Z" ${g.f('accent-dark')}/><path d="M374 254C364 224 346 204 320 194C332 248 354 308 410 344L404 296C392 290 380 274 374 254Z" ${g.f('ink','opacity=".28"')}/><path d="${body}" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('hc')})">
+    <path d="M258 70C304 150 300 250 332 344L450 366V60Z" ${g.f('accent-dark','opacity=".5"')}/>
+    <path d="M320 194C332 248 354 308 410 344L450 344V200Z" ${g.f('accent-dark')}/>
+    <path d="${body}" fill="${g.u('hshade')}"/>
+    <path d="M76 340C72 268 100 192 168 142C142 198 124 266 124 340Z" ${g.f('accent-light','opacity=".62"')}/>
+    <path d="M176 340C166 270 190 198 254 144" ${g.s('accent-dark',3.2,'opacity=".42"')}/>
+    <path d="M238 346C232 284 254 220 302 178" ${g.s('accent-dark',3,'opacity=".4"')}/>
+    <path d="M160 340C150 270 172 206 228 156" ${g.s('accent-light',2.6,'opacity=".55"')}/>
+    <path d="M374 254C364 224 346 204 320 194" ${g.s('accent-dark',4,'opacity=".6"')}/>
+    ${cl?`<rect width="480" height="480" fill="${g.u('felt')}"/><rect width="480" height="480" filter="url(#${g.id('grain')})" opacity=".26"/>`:''}</g></g>`;
+  o+=`<g id="${g.id('trim')}"><path d="${trim}" fill="${g.u('tgrad')}"/><g clip-path="url(#${g.id('tc')})">
+    <path d="M40 316H440V334C330 348 190 348 40 334Z" ${g.f('ink','opacity=".09"')}/>
+    <path d="${trim}" fill="${g.u('tside')}"/>${cl?woolTex(g,140,56,326,428,392,3,.35):''}</g></g>`;
+  o+=`<g id="${g.id('pom')}"><path d="${pom}" fill="${g.u('pgrad')}"/><g clip-path="url(#${g.id('pc')})">${cl?woolTex(g,60,360,270,440,346,9,.35):''}<path fill-rule="evenodd" d="M398 266a40 40 0 1 0 0.1 0ZM380 288a40 40 0 1 0 0.1 0Z" ${g.f('wool-deep','opacity=".0"')}/></g></g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET 2: CHRISTMAS TREE
+===================================================================== */
+function tierShape(cx,yT,yB,w,n,seed){
+  const r=rngf(seed),tips=[];
+  let d=`M${cx} ${yT}C${n1(cx+w*.1)} ${n1(yT+(yB-yT)*.32)} ${n1(cx+w*.55)} ${n1(yT+(yB-yT)*.66)} ${cx+w} ${yB-4}`,px=cx+w,py=yB-4;tips.push([px,py]);
+  for(let j=1;j<=n;j++){const x=cx+w-2*w*j/n,y=j===n?yB-4:yB+4+r()*9,nx=(px+x)/2,ny=yB-10-r()*6;
+    d+=`Q${n1(px+(nx-px)*.35)} ${n1(ny+15)} ${n1(nx)} ${n1(ny)}Q${n1(x+(nx-x)*.35)} ${n1(ny+15)} ${n1(x)} ${n1(y)}`;px=x;py=y;tips.push([x,y])}
+  d+=`C${n1(cx-w*.55)} ${n1(yT+(yB-yT)*.66)} ${n1(cx-w*.1)} ${n1(yT+(yB-yT)*.32)} ${cx} ${yT}Z`;
+  return {d,tips,cx,yT,yB,w};
+}
+function tierShape(cx,yT,yB,w,n,seed,drop,bl){bl=bl||.6;
+  const r=rngf(seed),tips=[];
+  let d=`M${cx} ${yT}C${n1(cx+w*.1)} ${n1(yT+(yB-yT)*.34)} ${n1(cx+w*bl)} ${n1(yT+(yB-yT)*.7)} ${cx+w} ${yB-4}`,px=cx+w,py=yB-4;tips.push([px,py]);
+  for(let j=1;j<=n;j++){const x=cx+w-2*w*j/n,y=j===n?yB-4:yB+drop*(.3+.9*r()),nx=(px+x)/2,ny=yB-8-r()*8;
+    d+=`Q${n1(px+(nx-px)*.35)} ${n1(ny+14)} ${n1(nx)} ${n1(ny)}Q${n1(x+(nx-x)*.35)} ${n1(ny+14)} ${n1(x)} ${n1(y)}`;px=x;py=y;tips.push([x,y])}
+  d+=`C${n1(cx-w*bl)} ${n1(yT+(yB-yT)*.7)} ${n1(cx-w*.1)} ${n1(yT+(yB-yT)*.34)} ${cx} ${yT}Z`;
+  return {d,tips,cx,yT,yB,w};
+}
+function drawTree(g){return `<g transform="translate(24 8) scale(.9)">${drawTree0(g)}</g>`}
+function drawTree0(g){
+  const T=[tierShape(242,64,168,56,2,3,8,.4),tierShape(236,114,232,92,3,5,12,.5),tierShape(245,178,300,124,5,8,16,.62),tierShape(235,244,368,156,6,13,20,.74),tierShape(241,312,440,190,7,21,24,.84)];
+  let o=`<defs>${sprigDef(g,'fl',150,3)}${sprigDef(g,'fr',150,8,['pine-deep','pine-deep','pine-base','pine-mid'])}`;
+  T.forEach((t,i)=>{o+=g.clip('tc'+i,t.d)+g.lg('tg'+i,t.cx-t.w,t.yT,t.cx+t.w,t.yB,[[0,'pine-light'],[.26,'pine-mid'],[.6,'pine-base'],[1,'pine-deep']])});
+  o+=g.lg('trk',206,0,276,0,[[0,'wood-light'],[.4,'wood-base'],[1,'wood-dark']])+g.lg('cast',200,0,470,0,[[0,'ink',.26],[1,'ink',0]])+`<filter id="${g.id('tsb')}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter></defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M190 466C250 452 354 456 470 480C372 482 262 480 186 474Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<path d="M206 428H276V472H206Z" fill="${g.u('trk')}"/><path d="M206 428H276V440H206Z" ${g.f('ink','opacity=".3"')}/>${g.opts.texture?`<path d="M222 448V468M240 444V470M258 450V468" ${g.s('wood-dark',2,'opacity=".6"')}/>`:''}`;
+  for(let i=4;i>=0;i--){
+    const t=T[i];o+=`<g id="${g.id('tier'+(5-i))}"><path d="${t.d}" fill="${g.u('tg'+i)}"/><g clip-path="url(#${g.id('tc'+i)})">`;
+    if(i>0)o+=`<path d="${T[i-1].d}" transform="translate(12 34)" ${g.f('pine-deep','opacity=".6"')} filter="url(#${g.id('tsb')})"/>`;
+    t.tips.forEach((p,k)=>{const O=[t.cx+(p[0]-t.cx)*.1,t.yT+(t.yB-t.yT)*.36],c1=[O[0]+(p[0]-O[0])*.4,O[1]+12],c2=[p[0]-(p[0]-O[0])*.18,p[1]-28];
+      o+=`<path d="M${n1(O[0])} ${n1(O[1])}C${n1(c1[0])} ${n1(c1[1])} ${n1(c2[0])} ${n1(c2[1])} ${n1(p[0])} ${n1(p[1])}" ${g.s('pine-deep',2.6,'opacity=".5"')}/><path d="M${n1(O[0]-4)} ${n1(O[1]-2)}C${n1(c1[0]-4)} ${n1(c1[1]-3)} ${n1(c2[0]-4)} ${n1(c2[1]-3)} ${n1(p[0]-4)} ${n1(p[1]-4)}" ${g.s('pine-light',1.6,'opacity=".42"')}/>`});
+    if(g.opts.texture){const r=rngf(40+i);let nd='';for(let q=0;q<46*(i+1);q++){const x=t.cx-t.w+r()*2*t.w,y=t.yT+r()*(t.yB-t.yT),L=8+r()*9,a=rad(70+(x-t.cx)/t.w*28);nd+=`M${n1(x)} ${n1(y)}l${n1(Math.cos(a)*L)} ${n1(Math.sin(a)*L)}`}o+=`<path d="${nd}" ${g.s('pine-deep',1.6,'opacity=".35"')}/>`}
+    o+=`</g>`;
+    o+=`</g>`;
+  }
+  const gar=(x0,x1,y,sag)=>{const P=[[x0,y],[x0+(x1-x0)*.3,y+sag],[x0+(x1-x0)*.7,y+sag],[x1,y]];let b='';for(let k=0;k<=15;k++){const p=cub(P,k/15);b+=`<circle cx="${n1(p[0])}" cy="${n1(p[1])}" r="${k%3===0?5.4:3.8}" ${g.f(k%3===0?'wool-white':'brass-base')}/>`}
+    return `<path d="M${x0} ${y}C${n1(P[1][0])} ${n1(P[1][1])} ${n1(P[2][0])} ${n1(P[2][1])} ${x1} ${y}" ${g.s('brass-dark',1.6)}/>${b}`};
+  o+=`<g id="${g.id('garland')}">${gar(170,314,226,22)}${gar(138,342,298,28)}${gar(104,376,372,32)}</g>`;
+  const want=[[4,1,'brand-accent',17],[4,3,'brass-base',15],[4,5,'accent-dark',16],[3,1,'wool-white',14],[3,3,'brand-accent',15],[3,4,'brass-base',13],[2,1,'accent-dark',13],[2,2,'brand-accent',14],[2,3,'brass-base',12],[1,1,'brand-accent',11],[1,2,'wool-white',11],[0,1,'brass-base',9]];
+  o+=`<g id="${g.id('baubles')}">`;want.forEach(([ti,k,role,rr],q)=>{const p=T[ti].tips[k];if(p)o+=`<path d="M${n1(p[0])} ${n1(p[1]-4)}V${n1(p[1]+8)}" ${g.s('brass-dark',1.6)}/>`+ball(g,'t'+q,n1(p[0]),n1(p[1]+8+rr+4),rr,role)});o+='</g>';
+  o+=`<g id="${g.id('star')}">${star5(g,244,52,28,12)}</g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET 3: BAUBLE
+===================================================================== */
+function drawBauble(g){
+  const cx=240,cy=292,R=140;
+  const dots=(()=>{let s='';const P0=[84,298],C=[240,364],P2=[396,298];for(let i=0;i<=14;i++){const t=i/14,u=1-t,x=u*u*P0[0]+2*u*t*C[0]+t*t*P2[0],y=u*u*P0[1]+2*u*t*C[1]+t*t*P2[1];s+=`<circle cx="${n1(x)}" cy="${n1(y)}" r="3.3" ${g.f('brass-dark','opacity=".8"')}/>`}return s})();
+  let o=`<defs>${g.clip('sc',`M${cx-R} ${cy}a${R} ${R} 0 1 0 ${2*R} 0a${R} ${R} 0 1 0 ${-2*R} 0Z`)}
+    ${g.rg('sph',186,222,236,[[0,'accent-light'],[.36,'brand-accent'],[1,'accent-dark']])}
+    ${g.rg('shade',212,252,176,[[0,'ink',0],[.62,'ink',0],[.86,'ink',.2],[1,'ink',.42]])}
+    ${g.lg('cap',210,0,274,0,[[0,'brass-light'],[.35,'brass-base'],[1,'brass-dark']])}
+    ${g.lg('band',0,262,0,372,[[0,'wool-highlight'],[1,'wool-shade']])}</defs>`;
+  if(g.opts.shadow) o+=`${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})" transform="translate(22 26)" opacity=".13"><circle cx="${cx}" cy="${cy}" r="${R}" ${g.f('ink')}/><rect x="206" y="112" width="68" height="46" rx="8" ${g.f('ink')}/></g>`;
+  o+=`<g id="${g.id('sphere')}"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${g.u('sph')}"/><g clip-path="url(#${g.id('sc')})">
+    <g transform="rotate(-13 240 292)"><path d="M70 270Q240 338 410 270L410 322Q240 392 70 322Z" fill="${g.u('band')}"/>
+    <path d="M70 270Q240 338 410 270" ${g.s('brass-base',3.4)}/><path d="M70 322Q240 392 410 322" ${g.s('brass-base',3.4)}/>${dots}
+    <path d="M70 278Q240 346 410 278" ${g.s('wool-shade',1.2,'opacity=".7"')}/></g>
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="${g.u('shade')}"/>
+    <path d="M${cx+R-18} ${cy+34}A${R-12} ${R-12} 0 0 1 ${cx+70} ${cy+R-26}" ${g.s('accent-light',5,'opacity=".4"')}/>
+    ${g.opts.texture?`<path d="M0 0" /><circle cx="${cx}" cy="${cy}" r="${R}" fill="none"/>`:''}</g>
+    <path d="M118 238C128 196 160 164 200 152C176 170 154 202 148 240C146 258 150 274 158 288C136 280 114 264 118 238Z" ${g.f('wool-highlight','opacity=".55"')}/>
+    <ellipse cx="206" cy="166" rx="12" ry="5" transform="rotate(-24 206 166)" ${g.f('wool-highlight','opacity=".85"')}/></g>`;
+  o+=`<g id="${g.id('cap')}"><path d="M196 160C202 144 220 138 240 138C260 138 278 144 284 160Z" fill="${g.u('cap')}"/>
+    <rect x="214" y="114" width="52" height="30" rx="3" fill="${g.u('cap')}"/><rect x="207" y="104" width="66" height="16" rx="7" fill="${g.u('cap')}"/>
+    <path d="M224 120V142M233 120V142M242 120V142M251 120V142M259 120V142" ${g.s('brass-dark',1.8,'opacity=".6"')}/>
+    <path d="M211 108H266" ${g.s('brass-light',2.2,'opacity=".8"')}/><path d="M210 160H270" ${g.s('brass-dark',2,'opacity=".5"')}/></g>`;
+  o+=`<g id="${g.id('loop')}"><ellipse cx="240" cy="78" rx="17" ry="25" ${g.s('brass-dark',5.5)}/><path d="M226 66C228 58 234 54 240 53" ${g.s('brass-light',2.6,'opacity=".9"')}/></g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET 4: WREATH
+===================================================================== */
+function drawWreath(g){
+  const cx=240,cy=236;
+  let o=`<defs>${sprigDef(g,'sprigA',126,2)}${sprigDef(g,'sprigB',118,7)}
+   ${g.lg('wlight',60,40,420,430,[[0,'pine-light',.34],[.45,'pine-light',0],[.55,'pine-deep',0],[1,'ink',.42]])}</defs>`;
+  if(g.opts.shadow) o+=`${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})" transform="translate(18 22)" opacity=".13"><path fill-rule="evenodd" d="M${cx-196} ${cy}a196 196 0 1 0 392 0a196 196 0 1 0 -392 0ZM${cx-84} ${cy}a84 84 0 1 0 168 0a84 84 0 1 0 -168 0Z" ${g.f('ink')}/></g>`;
+  const ringPath=(R1,R2)=>`M${cx-R1} ${cy}a${R1} ${R1} 0 1 0 ${2*R1} 0a${R1} ${R1} 0 1 0 ${-2*R1} 0ZM${cx-R2} ${cy}a${R2} ${R2} 0 1 0 ${2*R2} 0a${R2} ${R2} 0 1 0 ${-2*R2} 0Z`;
+  const layer=(N,Rr,off,sc,ref,tilt,seed)=>{const r=rngf(seed);let s='';for(let i=0;i<N;i++){const th=i*360/N+off+(r()-.5)*5,RR=Rr+(r()-.5)*12,x=cx+RR*Math.cos(rad(th)),y=cy+RR*Math.sin(rad(th)),rot=th+90+tilt+(r()-.5)*10,k=sc*(.92+r()*.16),fl=i%2?-1:1;
+      s+=`<use href="#${g.id(ref)}" xlink:href="#${g.id(ref)}" transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)}) scale(${n1(k)} ${n1(k*fl)})"/>`}return s};
+  o+=`<g id="${g.id('boughs')}">${layer(22,162,0,1.08,'sprigA',-4,1)}<path fill-rule="evenodd" d="${ringPath(205,112)}" ${g.f('pine-deep','opacity=".34"')}/>${layer(22,148,8,1,'sprigB',6,2)}<path fill-rule="evenodd" d="${ringPath(205,112)}" ${g.f('pine-deep','opacity=".2"')}/>${layer(20,134,4,.9,'sprigA',-2,3)}${layer(12,152,14,.74,'sprigB',-10,4)}<path fill-rule="evenodd" d="${ringPath(206,110)}" fill="${g.u('wlight')}"/></g>`;
+  o+=`<g id="${g.id('cones')}">${cone(g,382,128,38,.9)}${cone(g,92,196,-62,.82)}${cone(g,356,372,128,.78)}</g>`;
+  const cluster=(n,x,y)=>berry(g,n+'a',x-12,y+7,9)+berry(g,n+'b',x+10,y+9,9)+berry(g,n+'c',x,y-8,9)+berry(g,n+'d',x+18,y-6,7.5);
+  o+=`<g id="${g.id('berries')}">${cluster('c1',326,84)}${cluster('c2',124,92)}${cluster('c3',398,262)}${cluster('c4',210,392)}</g>`;
+  o+=`<g id="${g.id('bow')}">${bow(g,150,350,.94,16,R_BRAND)}</g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET 5: GIFT BOX  (oblique projection, light from top-left)
+===================================================================== */
+function drawGift(g){
+  return `<g transform="translate(-72 -118) scale(1.2)">${drawGift0(g)}</g>`;
+}
+function drawGift0(g){
+  const X0=88,Y0=426,Wd=212,Dp=128,Hb=132,Hl=52,kx=.62,ky=.31;
+  const P=(x,y,z)=>[X0+x+y*kx,Y0-z-y*ky];
+  const Q=(a)=>poly(a.map(p=>P(...p)));
+  const zt=Hb+Hl-6;
+  const frontB=Q([[0,0,0],[Wd,0,0],[Wd,0,Hb],[0,0,Hb]]),rightB=Q([[Wd,0,0],[Wd,Dp,0],[Wd,Dp,Hb],[Wd,0,Hb]]);
+  const L0=-9,L1=Wd+9,M0=-9,M1=Dp+9,z0=Hb-6;
+  const frontL=Q([[L0,M0,z0],[L1,M0,z0],[L1,M0,zt],[L0,M0,zt]]),rightL=Q([[L1,M0,z0],[L1,M1,z0],[L1,M1,zt],[L1,M0,zt]]),topL=Q([[L0,M0,zt],[L1,M0,zt],[L1,M1,zt],[L0,M1,zt]]);
+  const rw=34,cxr=Wd/2,cyr=Dp/2;
+  const rA_front_b=Q([[cxr-rw/2,0,0],[cxr+rw/2,0,0],[cxr+rw/2,0,Hb],[cxr-rw/2,0,Hb]]);
+  const rA_front_l=Q([[cxr-rw/2,M0,z0],[cxr+rw/2,M0,z0],[cxr+rw/2,M0,zt],[cxr-rw/2,M0,zt]]);
+  const rA_top=Q([[cxr-rw/2,M0,zt],[cxr+rw/2,M0,zt],[cxr+rw/2,M1,zt],[cxr-rw/2,M1,zt]]);
+  const rB_right_b=Q([[Wd,cyr-rw/2,0],[Wd,cyr+rw/2,0],[Wd,cyr+rw/2,Hb],[Wd,cyr-rw/2,Hb]]);
+  const rB_right_l=Q([[L1,cyr-rw/2,z0],[L1,cyr+rw/2,z0],[L1,cyr+rw/2,zt],[L1,cyr-rw/2,zt]]);
+  const rB_top=Q([[L0,cyr-rw/2,zt],[L1,cyr-rw/2,zt],[L1,cyr+rw/2,zt],[L0,cyr+rw/2,zt]]);
+  const C=P(cxr,cyr,zt);
+  const shadowPoly=[P(Wd,0,0),P(Wd,Dp,0),[P(Wd,Dp,0)[0]+78,P(Wd,Dp,0)[1]+30],[P(Wd,0,0)[0]+78,P(Wd,0,0)[1]+30]];
+  const allClip=frontB+rightB+frontL+rightL+topL;
+  let o=`<defs>${g.clip('gc',allClip)}
+   ${g.lg('cast',P(Wd,0,0)[0],0,P(Wd,0,0)[0]+80,0,[[0,'ink',.3],[1,'ink',0]])}
+   ${g.lg('satin',0,0,480,0,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}
+   ${g.lg('paperF',0,Y0-Hb,0,Y0,[[0,'brand-accent'],[1,'accent-dark',.55]])}
+   <pattern id="${g.id('paper')}" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="5" cy="5" r="1.7" ${g.f('accent-light','opacity=".34"')}/><circle cx="16" cy="16" r="1.7" ${g.f('accent-light','opacity=".34"')}/><path d="M11 0V4M0 11H4" ${g.s('accent-dark',1.2,'opacity=".25"')}/></pattern>
+   ${g.lg('twine',0,0,1,1,[[0,'kraft'],[1,'kraft-dark']])}</defs>`;
+  if(g.opts.shadow) o+=`${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})"><path d="${poly(shadowPoly)}" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('box')}">
+    <path d="${rightB}" ${g.f('accent-dark')}/><path d="${frontB}" ${g.f('brand-accent')}/><path d="${frontB}" fill="${g.u('paperF')}"/>
+    <path d="${Q([[0,0,Hb-18],[Wd,0,Hb-18],[Wd,0,Hb],[0,0,Hb]])}" ${g.f('ink','opacity=".24"')}/><path d="${Q([[Wd,0,Hb-18],[Wd,Dp,Hb-18],[Wd,Dp,Hb],[Wd,0,Hb]])}" ${g.f('ink','opacity=".26"')}/>
+    <path d="${Q([[0,0,0],[8,0,0],[8,0,Hb],[0,0,Hb]])}" ${g.f('accent-light','opacity=".4"')}/>
+    <path d="${rightL}" ${g.f('accent-dark')}/><path d="${frontL}" ${g.f('brand-accent')}/><path d="${topL}" ${g.f('accent-light')}/>
+    <path d="${Q([[L0,M0,z0],[L1,M0,z0],[L1,M0,z0+8],[L0,M0,z0+8]])}" ${g.f('accent-dark','opacity=".45"')}/>
+    <path d="${rightL}" ${g.f('ink','opacity=".1"')}/>
+    <path d="${Q([[L0,M0,z0+2],[L0+8,M0,z0+2],[L0+8,M0,zt],[L0,M0,zt]])}" ${g.f('accent-light','opacity=".45"')}/>
+    <path d="${Q([[L0,M0,zt],[L1,M0,zt],[L1,M0,zt-2.5],[L0,M0,zt-2.5]])}" ${g.f('accent-light','opacity=".9"')}/>
+    <g clip-path="url(#${g.id('gc')})">${g.opts.texture?`<path d="${frontB}${frontL}${rightB}${rightL}${topL}" fill="${g.u('paper')}"/>`:''}</g></g>`;
+  o+=`<g id="${g.id('ribbon')}">
+    <path d="${rB_right_b}" ${g.f('wool-shade')}/><path d="${rB_right_l}" ${g.f('wool-deep')}/>
+    <path d="${rA_front_b}" fill="${g.u('satin')}"/><path d="${rA_front_b}" ${g.f('ink','opacity=".05"')}/>
+    <path d="${Q([[cxr-rw/2,0,Hb-18],[cxr+rw/2,0,Hb-18],[cxr+rw/2,0,Hb],[cxr-rw/2,0,Hb]])}" ${g.f('ink','opacity=".18"')}/>
+    <path d="${rA_front_l}" ${g.f('wool-white')}/><path d="${rA_top}" ${g.f('wool-highlight')}/><path d="${rB_top}" ${g.f('wool-highlight')}/>
+    <path d="${rA_top}" ${g.f('wool-white','opacity=".0"')}/>
+    <path d="${Q([[cxr-rw/2,M0,zt],[cxr-rw/2+4,M0,zt],[cxr-rw/2+4,M1,zt],[cxr-rw/2,M1,zt]])}" ${g.f('wool-shade','opacity=".55"')}/>
+    <path d="${Q([[cxr-rw/2,M0,z0],[cxr-rw/2+4,M0,z0],[cxr-rw/2+4,M0,zt],[cxr-rw/2,M0,zt]])}" ${g.f('wool-shade','opacity=".6"')}/></g>`;
+  // fir sprigs
+  o+=`<defs>${sprigDef(g,'spg',92,5)}</defs><g id="${g.id('sprigs')}"><use href="#${g.id('spg')}" xlink:href="#${g.id('spg')}" transform="translate(${n1(C[0]-8)} ${n1(C[1]-6)}) rotate(-172) scale(1.15)"/><use href="#${g.id('spg')}" xlink:href="#${g.id('spg')}" transform="translate(${n1(C[0]+6)} ${n1(C[1]-4)}) rotate(-8) scale(1.1 -1.1)"/></g>`;
+  o+=`<g id="${g.id('berries')}">${berry(g,'g1',C[0]+34,C[1]+8,8)}${berry(g,'g2',C[0]+46,C[1]-2,7)}${berry(g,'g3',C[0]+26,C[1]+19,7)}</g>`;
+  // bow (cream satin)
+  o+=`<g id="${g.id('bow')}">${bow(g,C[0],C[1]-8,.68,0,R_CREAM)}</g>`;
+  // tag on twine
+  const tx=P(Wd-34,M0,Hb+14)[0],ty=P(Wd-34,M0,Hb+14)[1];
+  o+=`<g id="${g.id('tag')}"><path d="M${n1(C[0]+4)} ${n1(C[1]+4)}C${n1(C[0]+30)} ${n1(C[1]+30)} ${n1(tx-12)} ${n1(ty-6)} ${n1(tx)} ${n1(ty)}" ${g.s('kraft-dark',2)}/>
+    <g transform="translate(${n1(tx)} ${n1(ty)}) rotate(14)"><path d="M-22 0L-8 -14H22V62H-22Z" ${g.f('kraft')}/><path d="M-8 -14H22V62H8Z" ${g.f('kraft-dark','opacity=".4"')}/><circle cx="-1" cy="-2" r="4" ${g.f('wool-highlight')}/><circle cx="-1" cy="-2" r="4" fill="none" stroke="${g.pal['brass-dark']}" stroke-width="1.8"/>
+    <path d="M-12 22H12M-12 32H6M-12 42H10" ${g.s('wood-dark',1.8,'opacity=".6"')}/></g></g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET 6: REINDEER (profile bust, facing left)
+===================================================================== */
+function drawReindeer(g){
+  const S='M108 264C106 248 120 238 138 232C170 224 196 212 214 192C230 172 246 158 272 152C302 146 330 160 346 190C362 224 370 268 384 312C394 348 408 384 416 436L400 456L206 456C206 430 196 396 180 366C170 348 158 330 148 312C128 308 110 290 108 264Z';
+  const muzzle='M108 262C130 258 160 272 186 304C176 306 160 308 148 312C128 308 110 290 108 264Z';
+  const earN='M286 168C282 130 306 96 354 70C366 112 352 156 322 178C308 184 292 180 286 168Z';
+  const earNi='M298 164C298 134 316 110 346 90C350 122 338 150 318 168Z';
+  const earF='M256 160C244 124 256 90 284 56C300 88 298 128 282 156Z';
+  const aN=[[304,150],[356,112],[410,62],[374,16]],aF=[[278,150],[262,108],[238,64],[206,36]];
+  const A1=tube(aN,30,4),A2=tube(aF,24,4);
+  const tinesN=[branch(aN,.3,-62,64,-18),branch(aN,.5,-58,70,-22),branch(aN,.7,-50,52,-20),branch(aN,.42,64,48,16),[[308,140],[282,116],[252,110],[226,130]]].map(P=>({P,t:tube(P,17,3)}));
+  const tinesF=[branch(aF,.34,-60,56,-18),branch(aF,.6,-56,50,-20),[[282,138],[262,118],[240,116],[222,132]]].map(P=>({P,t:tube(P,14,3)}));
+  const scarf='M172 382C240 420 340 414 428 358C444 392 442 438 420 456C340 496 248 494 184 458C162 436 160 404 172 382Z';
+  const F=[[148,312],[170,346],[196,392],[206,458]];
+  let ruff='',inner=[],edge=[];{const rr=rngf(5);for(let i=0;i<=9;i++){const t=i/9,p=cub(F,t),d=cubd(F,t),l=Math.hypot(d[0],d[1]),nx=-d[1]/l,ny=d[0]/l;edge.push([p[0],p[1]]);inner.push([p[0]-nx*14,p[1]-ny*14]);if(i<9){const q=cub(F,(i+.5)/9);ruff+=`Q${n1(q[0]+nx*(15+rr()*6)+d[0]/l*8)} ${n1(q[1]+ny*(15+rr()*6)+d[1]/l*8)}`}if(i<9)ruff+=` ${n1(cub(F,(i+1)/9)[0])} ${n1(cub(F,(i+1)/9)[1])}`}}
+  ruff=`M${n1(edge[0][0])} ${n1(edge[0][1])}${ruff}L${n1(inner[9][0])} ${n1(inner[9][1])}${inner.slice().reverse().map(p=>`L${n1(p[0])} ${n1(p[1])}`).join('')}Z`;
+  const dash=(P,w)=>`<path d="M${P[0][0]} ${P[0][1]}C${P[1][0]} ${P[1][1]} ${P[2][0]} ${P[2][1]} ${P[3][0]} ${P[3][1]}" ${g.s('antler-dark',2,`opacity=".55" stroke-dasharray="9 14" transform="translate(${w} ${w*.6})"`)}/>`;
+  let o=`<defs>${g.clip('rs',S)}${g.clip('sc',scarf)}
+    ${g.lg('furg',150,150,420,430,[[0,'fur-light',.8],[.45,'fur-base',0],[1,'fur-dark',.75]])}
+    ${g.lg('scg',200,380,420,470,[[0,'accent-light',.35],[.5,'accent-light',0],[1,'accent-dark',.6]])}
+    ${knitDef(g,'knit')}</defs>`;
+  if(g.opts.shadow)o+=`${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})" transform="translate(18 20)" opacity=".14"><path d="${S}" ${g.f('ink')}/><path d="${A1.body}" ${g.f('ink')}/></g>`;
+  o+=`<g id="${g.id('far-antler')}"><path d="${A2.body}" ${g.f('antler-dark')}/><path d="${A2.hi}" ${g.f('antler-base')}/>${tinesF.map(t=>`<path d="${t.t.body}" ${g.f('antler-dark')}/><path d="${t.t.hi}" ${g.f('antler-base')}/>`).join('')}</g><path d="${earF}" ${g.f('fur-dark')}/>`;
+  o+=`<g id="${g.id('head')}"><path d="${S}" ${g.f('fur-base')}/><g clip-path="url(#${g.id('rs')})">
+    <path d="${S}" fill="${g.u('furg')}"/>
+    <path d="M214 192C246 176 282 176 312 196C330 214 346 250 352 296C330 262 300 232 266 216C246 206 228 202 214 192Z" ${g.f('fur-dark','opacity=".22"')}/>
+    <path d="${muzzle}" ${g.f('fur-cream')}/><path d="M132 300C150 290 176 286 196 296C214 330 230 380 238 460L206 456C206 430 196 396 180 366Z" ${g.f('fur-cream','opacity=".5"')}/>
+    <ellipse cx="236" cy="258" rx="38" ry="26" transform="rotate(32 236 258)" ${g.f('fur-light','opacity=".38"')}/>
+    <path d="M326 176C356 232 372 316 384 470H440V150Z" ${g.f('fur-dark','opacity=".42"')}/>
+    <path d="M178 232C198 246 208 262 208 284C200 266 186 252 166 244Z" ${g.f('fur-dark','opacity=".2"')}/>
+    ${g.opts.texture?furFlow(g,17,150,170,420,470,11,'fur-dark',.22,1.1)+furFlow(g,29,150,170,420,470,15,'fur-light',.4,1.1)+furFlow(g,31,110,250,260,470,12,'fur-cream',.5,1.1):''}</g></g>`;
+  o+=`<path d="${ruff}" ${g.f('fur-cream')}/><path d="${ruff}" ${g.f('fur-light','opacity=".35"')}/>`;
+  o+=`<g id="${g.id('ear')}"><path d="${earN}" ${g.f('fur-base')}/><path d="${earN}" ${g.f('fur-dark','opacity=".25"')}/><path d="${earNi}" ${g.f('fur-cream')}/><path d="M298 150C306 134 322 118 340 106" ${g.s('fur-dark',2.2,'opacity=".45"')}/></g>`;
+  o+=`<g id="${g.id('antler')}"><ellipse cx="302" cy="152" rx="20" ry="11" transform="rotate(-34 302 152)" ${g.f('antler-dark')}/>${tinesN.map(t=>`<path d="${t.t.body}" ${g.f('antler-base')}/><path d="${t.t.hi}" ${g.f('antler-light')}/><path d="${t.t.lo}" ${g.f('antler-dark','opacity=".85"')}/>`).join('')}<path d="${A1.body}" ${g.f('antler-base')}/><path d="${A1.hi}" ${g.f('antler-light')}/><path d="${A1.lo}" ${g.f('antler-dark','opacity=".85"')}/>${dash(aN,-2)}<ellipse cx="304" cy="150" rx="19" ry="10" transform="rotate(-34 304 150)" ${g.f('antler-dark')}/><ellipse cx="300" cy="147" rx="12" ry="5" transform="rotate(-34 300 147)" ${g.f('antler-base','opacity=".8"')}/></g>`;
+  o+=`<g id="${g.id('face')}">
+    <path d="M196 226C203 210 226 207 238 222C230 234 206 236 196 226Z" ${g.f('ink')}/><ellipse cx="214" cy="218" rx="4.6" ry="3" transform="rotate(-20 214 218)" ${g.f('wool-highlight','opacity=".92"')}/><circle cx="226" cy="226" r="1.6" ${g.f('wool-highlight','opacity=".5"')}/>
+    <path d="M192 224C200 205 228 203 242 220" ${g.s('fur-dark',3.4)}/><path d="M198 232C210 240 228 240 238 230" ${g.s('fur-dark',1.8,'opacity=".4"')}/>
+    <path d="M196 202C214 190 236 192 250 206" ${g.s('fur-dark',6,'opacity=".18"')}/>
+    <ellipse cx="124" cy="260" rx="15" ry="19" transform="rotate(-24 124 260)" ${g.f('brand-accent')}/><path d="M118 260C116 250 122 242 130 242C136 248 134 260 126 268Z" ${g.f('accent-dark','opacity=".6"')}/><ellipse cx="119" cy="252" rx="4.8" ry="3" transform="rotate(-30 119 252)" ${g.f('accent-light')}/>
+    <path d="M142 288C150 292 160 292 168 288" ${g.s('fur-dark',2.4,'opacity=".7"')}/><path d="M138 300C154 299 172 295 186 286" ${g.s('fur-dark',2.6,'opacity=".8"')}/>
+    <path d="M172 244C178 250 186 252 194 250" ${g.s('fur-dark',2,'opacity=".35"')}/></g>`;
+  o+=`<g id="${g.id('scarf')}"><path d="${scarf}" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('sc')})">${g.opts.texture?`<path d="${scarf}" fill="url(#${g.id('knit')})"/>`:''}<path d="${scarf}" fill="${g.u('scg')}"/>
+    <path d="M190 410C250 442 336 432 418 388" ${g.s('wool-white',9,'opacity=".95"')}/><path d="M190 410C250 442 336 432 418 388" ${g.s('wool-shade',3,'opacity=".5"')} transform="translate(0 5)"/>
+    <path d="M190 428C250 460 336 450 418 406" ${g.s('wool-white',5,'opacity=".9"')}/></g>
+    <path d="M198 392C252 422 334 412 410 370" ${g.s('accent-light',3,'opacity=".7"')}/></g>`;
+  return o;
+}
+
+/* =====================================================================
+   BATCH 2
+===================================================================== */
+function pathPts(Ps,n=70){const pts=[];Ps.forEach((P,k)=>{for(let i=(k?1:0);i<=n;i++)pts.push(cub(P,i/n))});return pts}
+function ptsTable(pts){const cum=[0];for(let i=1;i<pts.length;i++)cum.push(cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));const L=cum[cum.length-1];
+  const tgAt=i=>{const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;return [dx/l,dy/l]};
+  const mk=(p,t)=>({p,tg:t,n:[t[1],-t[0]]});
+  return {L,at(s){if(s<0){const t=tgAt(0);return mk([pts[0][0]+t[0]*s,pts[0][1]+t[1]*s],t)}
+    if(s>L){const t=tgAt(pts.length-1),q=pts[pts.length-1];return mk([q[0]+t[0]*(s-L),q[1]+t[1]*(s-L)],t)}
+    let i=0;while(i<pts.length-2&&cum[i+1]<s)i++;const f=(s-cum[i])/((cum[i+1]-cum[i])||1),t0=tgAt(i),t1=tgAt(i+1),tx=t0[0]+(t1[0]-t0[0])*f,ty=t0[1]+(t1[1]-t0[1])*f,tl=Math.hypot(tx,ty)||1;
+    return mk([pts[i][0]+(pts[i+1][0]-pts[i][0])*f,pts[i][1]+(pts[i+1][1]-pts[i][1])*f],[tx/tl,ty/tl])}}}
+function ptsTube(T,w,o0,o1){const A=[],B=[];const S=[];for(let s=0;s<T.L;s+=6)S.push(s);S.push(T.L);S.forEach(s=>{const q=T.at(s);A.push([q.p[0]+q.n[0]*w/2*o0,q.p[1]+q.n[1]*w/2*o0]);B.push([q.p[0]+q.n[0]*w/2*o1,q.p[1]+q.n[1]*w/2*o1])});return poly([...A,...B.reverse()])}
+function caneStripes(g,T,W,per,role,shr){
+  const sh=W*(shr==null?.8:shr);let o='';
+  for(let a=-W*1.5;a<T.L+W*1.5;a+=per){const b=a+per/2,L=[],R=[];
+    for(let i=0;i<=6;i++){const q=T.at(a+(b-a)*i/6);L.push([q.p[0]+q.n[0]*W-q.tg[0]*sh,q.p[1]+q.n[1]*W-q.tg[1]*sh]);R.push([q.p[0]-q.n[0]*W+q.tg[0]*sh,q.p[1]-q.n[1]*W+q.tg[1]*sh])}
+    o+=`<path d="${poly([...L,...R.reverse()])}" ${g.f(role)}/>`}
+  return o;
+}
+function knitDef(g,name){return `<pattern id="${g.id(name)}" width="14" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)"><path d="M0 0L7 8L14 0M0 6L7 14L14 6" fill="none" stroke="${g.pal['accent-dark']}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity=".42" class="accent-dark"/><path d="M0 3L7 11L14 3" fill="none" stroke="${g.pal['accent-light']}" stroke-width="1.2" stroke-linecap="round" opacity=".5" class="accent-light"/></pattern>`}
+function shadowOpen(g,tr,op){return `${g.blurDef()}<g id="${g.id('shadow')}" filter="url(#${g.id('blur')})" transform="${tr}" opacity="${op}">`}
+
+/* ---------- CANDY CANE ---------- */
+function drawCane(g){
+  const W=60,T=ptsTable(pathPts([[[196,446],[196,360],[196,290],[196,230]],[[196,230],[196,64],[392,64],[392,196]]]));
+  const body=ptsTube(T,W,1,-1),hi=ptsTube(T,W,.9,.3),lo=ptsTube(T,W,-.3,-.9),q0=T.at(0).p,q1=T.at(T.L).p;
+  let o=`<defs><clipPath id="${g.id('cc')}"><path d="${body}"/><circle cx="${n1(q0[0])}" cy="${n1(q0[1])}" r="${W/2}"/><circle cx="${n1(q1[0])}" cy="${n1(q1[1])}" r="${W/2}"/></clipPath>${sprigDef(g,'spc',84,9)}</defs>`;
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(22 26)',.2)}<path d="${body}" ${g.f('ink')}/><circle cx="${n1(q0[0])}" cy="${n1(q0[1])}" r="${W/2}" ${g.f('ink')}/><circle cx="${n1(q1[0])}" cy="${n1(q1[1])}" r="${W/2}" ${g.f('ink')}/></g>`;
+  o+=`<g id="${g.id('cane')}" clip-path="url(#${g.id('cc')})"><rect width="480" height="480" ${g.f('wool-white')}/>${caneStripes(g,T,W/2,56,'brand-accent')}
+    <path d="${lo}" ${g.f('ink','opacity=".22"')}/><path d="${hi}" ${g.f('wool-highlight','opacity=".34"')}/></g>`;
+  o+=`<path d="M180 426V250C180 150 230 92 300 84" ${g.s('wool-highlight',4,'opacity=".6"')}/>`;
+  o+=`<g id="${g.id('sprigs')}"><use href="#${g.id('spc')}" transform="translate(200 326) rotate(150) scale(.95)"/><use href="#${g.id('spc')}" transform="translate(194 330) rotate(30) scale(.95 -.95)"/></g>`;
+  o+=`<g id="${g.id('berries')}">${berry(g,'k1',180,350,9)}${berry(g,'k2',202,356,9)}${berry(g,'k3',191,338,8)}</g>`;
+  o+=`<g id="${g.id('bow')}">${bow(g,196,322,.6,0,['pine-base','pine-deep','pine-light'])}</g>`;
+  return o;
+}
+
+/* ---------- STOCKING ---------- */
+function drawStocking(g){
+  const body='M172 100H304V298C304 320 322 330 346 340C394 358 414 388 404 420C394 452 350 456 316 450C262 442 208 428 182 392C164 366 172 328 172 290Z';
+  const cuff=fluffBand(144,332,62,138,12,8,6,8);
+  let o=`<defs>${g.clip('sk',body)}${g.clip('ck',cuff)}
+   ${g.lg('sg',170,100,410,450,[[0,'accent-light',.45],[.4,'accent-light',0],[.62,'accent-dark',0],[1,'accent-dark',.75]])}
+   ${g.lg('cg',0,62,0,138,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}
+   ${knitDef(g,'knit')}
+   <pattern id="${g.id('dia')}" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M13 3L23 13L13 23L3 13Z" ${g.f('wool-white','opacity=".92"')}/><path d="M13 9L17 13L13 17L9 13Z" ${g.f('accent-dark')}/></pattern>
+   ${sprigDef(g,'spk',84,12)}</defs>`;
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(22 24)',.2)}<path d="${body}" ${g.f('ink')}/><path d="${cuff}" ${g.f('ink')}/></g>`;
+  o+=`<path d="M190 96C170 14 244 8 238 96" ${g.s('accent-dark',11)}/><path d="M190 96C170 14 244 8 238 96" ${g.s('brand-accent',6)}/>`;
+  o+=`<g id="${g.id('sock')}"><path d="${body}" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('sk')})">
+    <path d="M300 100C310 250 320 330 410 400L450 470V100Z" ${g.f('accent-dark','opacity=".4"')}/>
+    <rect x="160" y="176" width="160" height="58" ${g.f('accent-dark')}/><rect x="160" y="176" width="160" height="58" fill="${g.u('dia')}"/>
+    <path d="M160 176H320M160 234H320" ${g.s('wool-white',4)}/>
+    <path d="${body}" fill="${g.u('sg')}"/>
+    <path d="M178 150V330" ${g.s('accent-light',6,'opacity=".5"')}/>
+    ${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}
+    <path d="M146 326C160 390 200 430 262 452L262 392C232 380 206 356 198 322Z" ${g.f('wool-white')}/><path d="M146 326C160 390 200 430 262 452L262 392C232 380 206 356 198 322Z" ${g.f('ink','opacity=".07"')}/><path d="M198 322C206 356 232 380 262 392" ${g.s('wool-shade',3)}/>
+    <path d="M330 326C388 342 420 378 410 420C404 446 380 456 350 454C366 420 362 366 330 326Z" ${g.f('wool-white')}/><path d="M330 326C388 342 420 378 410 420C404 446 380 456 350 454C366 420 362 366 330 326Z" ${g.f('ink','opacity=".1"')}/><path d="M330 326C362 366 366 420 350 454" ${g.s('wool-shade',3)}/></g></g>`;
+  o+=`<g id="${g.id('cuff')}"><path d="${cuff}" fill="${g.u('cg')}"/><g clip-path="url(#${g.id('ck')})"><path d="M130 112H350V150C260 164 200 164 130 150Z" ${g.f('ink','opacity=".14"')}/>${g.opts.texture?woolTex(g,120,150,70,330,134,8,.35):''}</g></g>`;
+  o+=`<g id="${g.id('sprigs')}"><use href="#${g.id('spk')}" transform="translate(236 128) rotate(160) scale(.6)"/><use href="#${g.id('spk')}" transform="translate(240 130) rotate(24) scale(.6 -.6)"/></g>
+   <g id="${g.id('berries')}">${berry(g,'s1',230,134,8)}${berry(g,'s2',246,139,8)}${berry(g,'s3',238,124,7)}</g>`;
+  return o;
+}
+
+/* wide satin ribbon along a bezier */
+function ribbon(g,P,w0,w1){
+  const q=tube(P,w0,w1||w0),e=cub(P,1);
+  return `<path d="${q.body}" ${g.f('brand-accent')}/><path d="${q.lo}" ${g.f('accent-dark','opacity=".45"')}/><path d="${q.hi}" ${g.f('accent-light','opacity=".55"')}/>`;
+}
+/* ---------- BELLS ---------- */
+function holly(g,x,y,rot,sc,flip=1){return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc} ${sc*flip})"><path d="M0 0C8 -16 26 -22 38 -14L46 -26L54 -12L68 -14L64 -2L74 8L58 10L56 24L40 16C26 22 8 16 0 0Z" ${g.f('pine-base')}/><path d="M0 0C8 -16 26 -22 38 -14L46 -26L54 -12L68 -14L64 -2L74 2L0 0Z" ${g.f('pine-light','opacity=".55"')}/><path d="M0 0C8 4 22 6 40 16L56 24L58 10L74 8L64 -2L40 12Z" ${g.f('pine-deep','opacity=".35"')}/><path d="M2 1C26 1 50 -1 70 -1" ${g.s('pine-deep',1.8,'opacity=".7"')}/></g>`}
+function bellG(g,k,x,y,rot,sc){
+  const body='M0 -84C-30 -84 -50 -62 -54 -30C-60 20 -78 50 -98 68C-102 72 -100 80 -94 80H94C100 80 102 72 98 68C78 50 60 20 54 -30C50 -62 30 -84 0 -84Z';
+  let dots='';for(let X=-60;X<=60;X+=15){const Y=30+6*(1-(X/70)*(X/70));dots+=`<circle cx="${X}" cy="${n1(Y)}" r="2.6" ${g.f('brass-dark','opacity=".6"')}/>`}
+  return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})"><defs>${g.lg('bb'+k,-100,0,100,0,[[0,'brass-dark'],[.1,'brass-base'],[.26,'brass-light'],[.48,'brass-base'],[.82,'brass-dark'],[1,'brass-base']])}${g.rg('cl'+k,-4,86,18,[[0,'brass-light'],[.6,'brass-base'],[1,'brass-dark']])}${g.lg('sh'+k,0,-84,0,80,[[0,'ink',0],[.7,'ink',0],[1,'ink',.22]])}</defs>
+   <ellipse cx="0" cy="82" rx="94" ry="12" ${g.f('wood-dark')}/><circle cx="0" cy="91" r="17" fill="${g.u('cl'+k)}"/>
+   <path d="${body}" fill="${g.u('bb'+k)}"/><path d="${body}" fill="${g.u('sh'+k)}"/>
+   <path d="M-100 62Q0 82 100 62V80Q0 100 -100 80Z" ${g.f('brass-dark','opacity=".4"')}/><path d="M-98 64Q0 84 98 64" ${g.s('brass-light',3,'opacity=".75"')}/>
+   <path d="M-62 14Q0 30 62 14" ${g.s('brass-dark',2.6,'opacity=".45"')}/><path d="M-70 46Q0 62 70 46" ${g.s('brass-light',2,'opacity=".55"')}/>${dots}
+   <path d="M-36 -66C-50 -30 -54 14 -82 54" ${g.s('wool-highlight',8,'opacity=".55"')}/><path d="M-28 -72C-34 -60 -38 -50 -40 -40" ${g.s('wool-highlight',4,'opacity=".9"')}/>
+   <path d="M46 -40C54 6 70 40 90 62" ${g.s('brass-light',3,'opacity=".4"')}/>
+   <rect x="-13" y="-104" width="26" height="24" rx="7" fill="${g.u('bb'+k)}"/><ellipse cx="0" cy="-104" rx="9" ry="3.4" ${g.f('brass-light')}/></g>`;
+}
+function drawBells(g){
+  const A=[118,312,-9,.86],B=[362,312,9,.86],lp=b=>{const a=rad(b[2]);return [b[0]+Math.sin(a)*106*b[3],b[1]-Math.cos(a)*106*b[3]]},la=lp(A),lb=lp(B);
+  const bd='M0 -84C-30 -84 -50 -62 -54 -30C-60 20 -78 50 -98 68H98C78 50 60 20 54 -30C50 -62 30 -84 0 -84Z';
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(18 22)',.18)}${[A,B].map(b=>`<g transform="translate(${b[0]} ${b[1]}) rotate(${b[2]}) scale(${b[3]})"><path d="${bd}" ${g.f('ink')}/></g>`).join('')}</g>`;
+  const rb=(l,dir)=>ribbon(g,[[240,128],[240+dir*26,176],[l[0]-dir*22,l[1]-62],[l[0],l[1]-6]],17,15);
+  o+=`<g id="${g.id('bells')}">${bellG(g,'a',...A)}${bellG(g,'b',...B)}</g>`;
+  o+=`<g id="${g.id('ribbons')}">${rb(la,-1)}${rb(lb,1)}</g>`;
+  o+=`<g id="${g.id('holly')}">${holly(g,236,132,190,1.3)}${holly(g,236,132,154,1.15,-1)}${holly(g,244,132,-10,1.3,-1)}${holly(g,244,132,26,1.15)}</g>`;
+  o+=`<g id="${g.id('berries')}">${berry(g,'b1',224,150,10)}${berry(g,'b2',246,156,10)}${berry(g,'b3',234,134,9)}${berry(g,'b4',258,140,8)}</g>`;
+  o+=`<g id="${g.id('bow')}">${bow(g,240,100,.7,0,R_BRAND)}</g>`;
+  return o;
+}
+
+/* ---------- CANDLES ---------- */
+function candle(g,n,x,top,w,roles){
+  const [lt,md,dk]=roles,bot=402,h=w/2;
+  return `<defs>${g.lg('cd'+n,x-h,0,x+h,0,[[0,lt],[.3,md],[1,dk]])}</defs>
+   <path d="M${x-h} ${top}V${bot}Q${x} ${bot+14} ${x+h} ${bot}V${top}Z" fill="${g.u('cd'+n)}"/>
+   <path d="M${x+h-10} ${top}V${bot}Q${x+h-4} ${bot+10} ${x+h} ${bot}V${top}Z" ${g.f('ink','opacity=".14"')}/>
+   <path d="M${x-h*.62} ${top+8}V${top+(n==='b'?62:44)}M${x+h*.18} ${top+8}V${top+(n==='b'?96:70)}" ${g.s(lt,9,'opacity=".95"')}/>
+   <ellipse cx="${x}" cy="${top}" rx="${h}" ry="9" ${g.f(lt)}/><ellipse cx="${x}" cy="${top+1}" rx="${h*.62}" ry="5" ${g.f(md)}/>
+   <path d="M${x-h+4} ${top+14}V${bot-6}" ${g.s(lt,4,'opacity=".55"')}/>`;
+}
+function flame(g,n,x,y,s){
+  return `<g transform="translate(${x} ${y}) scale(${s})"><defs>${g.rg('gl'+n,0,-40,70,[[0,'brass-light',.55],[1,'brass-light',0]])}${g.lg('fl'+n,0,-84,0,0,[[0,'brass-light'],[.55,'brass-base'],[1,'accent-light']])}</defs>
+   <circle cx="0" cy="-40" r="70" fill="${g.u('gl'+n)}"/><path d="M0 -3V-14" ${g.s('ink',3.4)}/>
+   <path d="M0 -8C-17 -24 -19 -52 0 -88C19 -52 17 -24 0 -8Z" fill="${g.u('fl'+n)}"/>
+   <path d="M0 -10C-8 -20 -8 -36 0 -52C8 -36 8 -20 0 -10Z" ${g.f('wool-highlight')}/></g>`;
+}
+function drawCandles(g){
+  const C=[['a',140,262,62,['wool-highlight','wool-white','wool-deep']],['c',240,176,78,['accent-light','brand-accent','accent-dark']],['b',340,300,60,['wool-highlight','wool-white','wool-deep']]];
+  let o=`<defs>${g.lg('pl',70,0,410,0,[[0,'brass-light'],[.4,'brass-base'],[1,'brass-dark']])}${sprigDef(g,'spd',100,17)}</defs>`;
+  if(g.opts.shadow)o+=`<defs>${g.lg('cast',60,0,480,0,[[0,'ink',.28],[1,'ink',0]])}</defs><g id="${g.id('shadow')}"><path d="M110 436C220 424 360 436 476 470C360 474 230 470 100 452Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('plate')}"><ellipse cx="240" cy="418" rx="176" ry="38" ${g.f('brass-dark')}/><ellipse cx="240" cy="408" rx="176" ry="38" fill="${g.u('pl')}"/><ellipse cx="240" cy="404" rx="146" ry="28" ${g.f('brass-dark','opacity=".55"')}/><ellipse cx="240" cy="408" rx="146" ry="28" ${g.f('brass-base','opacity=".5"')}/><path d="M80 396C110 372 190 366 240 366" ${g.s('brass-light',3,'opacity=".8"')}/></g>`;
+  o+=`<g id="${g.id('candles')}">${C.map(c=>candle(g,...c.slice(0,1),c[1],c[2],c[3],c[4])).join('')}</g>`;
+  o+=`<g id="${g.id('flames')}">${C.map(c=>flame(g,c[0],c[1],c[2]-4,c[3]>70?1.05:.9)).join('')}</g>`;
+  o+=`<g id="${g.id('sprigs')}"><use href="#${g.id('spd')}" transform="translate(240 410) rotate(172) scale(.9)"/><use href="#${g.id('spd')}" transform="translate(240 410) rotate(8) scale(.9 -.9)"/><use href="#${g.id('spd')}" transform="translate(240 414) rotate(-175) scale(.7 -.7)"/><use href="#${g.id('spd')}" transform="translate(240 414) rotate(-4) scale(.7)"/></g>`;
+  o+=`<g id="${g.id('berries')}">${berry(g,'d1',226,404,10)}${berry(g,'d2',250,410,10)}${berry(g,'d3',238,392,9)}${berry(g,'d4',264,398,8)}</g>`;
+  return o;
+}
+
+/* ---------- SNOWMAN ---------- */
+function drawSnowman(g){return `<g transform="translate(19 30) scale(.92)">${drawSnowman0(g)}</g>`}
+function drawSnowman0(g){
+  const ball=(n,cx,cy,r)=>`<defs>${g.rg('sn'+n,cx-r*.42,cy-r*.5,r*1.75,[[0,'snow-white'],[.45,'snow-white'],[.8,'snow-shade'],[1,'snow-deep']])}</defs><circle cx="${cx}" cy="${cy}" r="${r}" fill="${g.u('sn'+n)}"/>`;
+  const arm=P=>[tube(branch(P,.5,-50,52,-12),9,2.5),tube(branch(P,.72,42,36,10),8,2.5),tube(branch(P,.86,-30,26,0),6,2),tube(P,16,4)].map(q=>`<path d="${q.body}" ${g.f('wood-base')}/><path d="${q.hi}" ${g.f('wood-light')}/><path d="${q.lo}" ${g.f('wood-dark','opacity=".8"')}/>`).join('');
+  const hat='M176 92C168 32 204 8 240 8C276 8 312 32 304 92Z',band=fluffBand(166,314,72,106,10,6,4,5),pom=fluffRing(240,2,19,11,5,2);
+  const tail='M268 214L324 204L344 310L288 322Z';
+  let o=`<defs>${g.clip('hh',hat)}${g.clip('c1','M120 358a120 120 0 1 0 240 0a120 120 0 1 0 -240 0Z')}${g.clip('c2','M146 230a94 94 0 1 0 188 0a94 94 0 1 0 -188 0Z')}
+    ${g.lg('hg',180,10,300,100,[[0,'accent-light',.5],[.5,'accent-light',0],[1,'accent-dark',.6]])}${g.lg('nz',0,126,0,152,[[0,'carrot-light'],[.5,'carrot-base'],[1,'carrot-dark']])}${g.lg('cast',200,0,480,0,[[0,'ink',.24],[1,'ink',0]])}${knitDef(g,'knit')}
+    ${g.lg('bd',0,72,0,106,[[0,'wool-highlight'],[1,'wool-shade']])}${g.clip('scf','M160 164C204 200 276 200 320 164L330 206C280 240 200 240 150 206Z')}
+    <filter id="${g.id('sb')}" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="8"/></filter></defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M220 452C300 428 410 436 480 470C410 482 290 480 220 474Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('arms')}">${arm([[158,244],[118,240],[84,216],[44,158]])}${arm([[322,244],[364,242],[398,216],[436,156]])}</g>`;
+  o+=`<g id="${g.id('body')}">${ball('a',240,358,120)}<g clip-path="url(#${g.id('c1')})"><ellipse cx="244" cy="318" rx="96" ry="26" ${g.f('snow-deep','opacity=".5"')} filter="url(#${g.id('sb')})"/></g>${ball('b',240,230,94)}<g clip-path="url(#${g.id('c2')})"><ellipse cx="246" cy="176" rx="68" ry="22" ${g.f('snow-deep','opacity=".5"')} filter="url(#${g.id('sb')})"/></g>${ball('c',240,112,70)}
+    <path d="M178 330C158 356 156 392 172 424" ${g.s('wool-highlight',8,'opacity=".7"')}/><path d="M172 190C158 208 156 236 168 258" ${g.s('wool-highlight',6,'opacity=".65"')}/>
+    ${g.opts.texture?(()=>{const r=rngf(31);let d='';for(let i=0;i<70;i++){const a=r()*6.28,rr=Math.sqrt(r())*108;d+=`<circle cx="${n1(240+Math.cos(a)*rr)}" cy="${n1(358+Math.sin(a)*rr*1.0)}" r="${n1(1+r()*1.4)}"/>`}return `<g ${g.f('snow-shade','opacity=".5"')}>${d}</g>`})():''}</g>`;
+  o+=`<path d="M40 478C96 456 168 450 240 452C312 450 384 456 440 478Z" ${g.f('snow-white')}/><path d="M40 478C96 468 168 466 240 467C312 466 384 468 440 478Z" ${g.f('snow-shade','opacity=".35"')}/>`;
+  o+=`<g id="${g.id('buttons')}">${[[240,252],[242,290],[240,328]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="10" ${g.f('ink')}/><circle cx="${x-3}" cy="${y-3.5}" r="3" ${g.f('wool-highlight','opacity=".55"')}/>`).join('')}</g>`;
+  o+=`<g id="${g.id('face')}"><ellipse cx="204" cy="140" rx="14" ry="9" ${g.f('accent-light','opacity=".4"')}/><ellipse cx="278" cy="140" rx="12" ry="8" ${g.f('accent-light','opacity=".32"')}/>
+    <circle cx="214" cy="118" r="8" ${g.f('ink')}/><circle cx="266" cy="118" r="8" ${g.f('ink')}/><circle cx="211" cy="115" r="2.6" ${g.f('wool-highlight')}/><circle cx="263" cy="115" r="2.6" ${g.f('wool-highlight')}/>
+    <path d="M234 128C262 124 294 136 320 154C292 156 262 154 234 148C224 144 224 132 234 128Z" fill="${g.u('nz')}"/><path d="M240 132C264 132 290 140 308 150" ${g.s('carrot-light',2.2,'opacity=".8"')}/><path d="M262 134C264 140 264 146 262 152M284 142C286 146 286 150 285 154" ${g.s('carrot-dark',1.6,'opacity=".5"')}/>
+    ${[0,1,2,3,4,5].map(i=>{const t=i/5;return `<circle cx="${n1(194+t*54)}" cy="${n1(158+18*Math.sin(Math.PI*t))}" r="3.4" ${g.f('ink')}/>`}).join('')}</g>`;
+  o+=`<g id="${g.id('scarf')}"><path d="M160 164C204 200 276 200 320 164L330 206C280 240 200 240 150 206Z" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('scf')})"><path d="M150 186C206 222 278 222 330 186" ${g.s('wool-white',7,'opacity=".92"')}/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}<path d="M150 214C210 246 290 238 336 200V250H150Z" ${g.f('accent-dark','opacity=".4"')}/><path d="M160 164C204 196 276 196 320 164" ${g.s('accent-light',4,'opacity=".5"')}/></g>
+    <path d="${tail}" ${g.f('brand-accent')}/>${g.opts.texture?`<path d="${tail}" fill="${g.u('knit')}"/>`:''}<path d="M288 322L344 310L346 322L290 334Z" ${g.f('accent-dark')}/><path d="M292 334V348M302 332V347M312 330V345M322 328V343M332 326V341M342 324V338" ${g.s('brand-accent',4)}/><path d="M278 262L338 250M282 284L342 272" ${g.s('wool-white',7,'opacity=".92"')}/><path d="M318 206L344 310L330 312L306 208Z" ${g.f('accent-dark','opacity=".35"')}/></g>`;
+  o+=`<g id="${g.id('hat')}"><path d="${hat}" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('hh')})"><path d="${hat}" fill="${g.u('hg')}"/><path d="M180 86C182 44 202 20 226 12" ${g.s('accent-light',8,'opacity=".5"')}/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}</g><path d="${band}" fill="${g.u('bd')}"/><path d="${pom}" fill="${g.u('bd')}"/></g>`;
+  return o;
+}
+
+/* ---------- STAR ---------- */
+function drawStar(g){
+  const cx=240,cy=272,R=182,r=80;
+  const out=[];for(let i=0;i<10;i++){const a=rad(-90+i*36),rr=i%2?r:R;out.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)])}
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(20 26)',.2)}<path d="${poly(out)}" ${g.f('ink')} stroke="${g.pal.ink}" stroke-width="12" stroke-linejoin="round"/></g>`;
+  o+=`<defs>${g.rg('sg',cx-60,cy-80,300,[[0,'accent-light',.45],[.5,'accent-light',0],[1,'accent-dark',.35]])}</defs><g id="${g.id('star')}"><path d="${poly(out)}" ${g.f('brand-accent')}/><path d="${poly(out)}" fill="none" stroke="${g.pal['brass-base']}" stroke-width="14" stroke-linejoin="round" class="brass-base"/>`;
+  g.used.add('brass-base');
+  for(let i=0;i<10;i++){const j=(i+1)%10,tip=i%2===0?out[i]:out[j],val=i%2===0?out[j]:out[i],side=i%2===0?1:-1;
+    const mx=(tip[0]+val[0]+cx)/3,my=(tip[1]+val[1]+cy)/3,l=Math.cos(Math.atan2(my-cy,mx-cx)-rad(-135));
+    const role=l>.35?'accent-light':l>-.35?'brand-accent':'accent-dark';
+    o+=`<path d="${poly([[cx,cy],out[i],out[j]])}" ${g.f(role)} stroke="${g.pal[role]}" stroke-width="1.2" stroke-linejoin="round"/>`;
+    // alternate facets on each point so the point reads as a folded ridge
+    const t2=[cx+(tip[0]-cx)*.55,cy+(tip[1]-cy)*.55];
+    if(i%2===0)o+=`<path d="${poly([[cx,cy],t2,[cx+(val[0]-cx)*.55,cy+(val[1]-cy)*.55]])}" ${g.f('ink','opacity=".0"')}/>`;
+  }
+  // ridge folds: darker right half of each point
+  for(let k=0;k<5;k++){const tip=out[k*2],v1=out[(k*2+1)%10];o+=`<path d="${poly([[cx,cy],tip,v1])}" ${g.f('ink','opacity=".16"')}/>`}
+  o+=`<path d="${poly(out)}" fill="${g.u('sg')}"/>`;
+  o+=`<path d="${poly(out)}" fill="none" stroke="${g.pal['brass-light']}" stroke-width="3" stroke-linejoin="round" opacity=".8" class="brass-light"/>`;g.used.add('brass-light');
+  o+=`</g><g id="${g.id('loop')}"><ellipse cx="240" cy="${n1(out[0][1]-32)}" rx="15" ry="22" ${g.s('brass-dark',5.5)}/><path d="M229 ${n1(out[0][1]-44)}C231 ${n1(out[0][1]-52)} 236 ${n1(out[0][1]-55)} 241 ${n1(out[0][1]-55)}" ${g.s('brass-light',2.6)}/></g>`;
+  const sp=(x,y,q)=>`<path d="M${x} ${y-q}Q${x} ${y} ${x+q} ${y}Q${x} ${y} ${x} ${y+q}Q${x} ${y} ${x-q} ${y}Q${x} ${y} ${x} ${y-q}Z" ${g.f('brass-light')}/>`;
+  o+=`<g id="${g.id('sparkles')}">${sp(66,126,18)}${sp(424,400,22)}${sp(416,106,12)}${sp(62,384,10)}</g>`;
+  return o;
+}
+
+/* =====================================================================
+   BATCH 3
+===================================================================== */
+function clipMulti(g,n,ds){return `<clipPath id="${g.id(n)}">${ds.map(d=>`<path d="${d}"/>`).join('')}</clipPath>`}
+function taperPoly(T,wf,o0,o1){const A=[],B=[],S=[];for(let s=0;s<T.L;s+=6)S.push(s);S.push(T.L);S.forEach(s=>{const q=T.at(s),w=wf(s)/2;A.push([q.p[0]+q.n[0]*w*o0,q.p[1]+q.n[1]*w*o0]);B.push([q.p[0]+q.n[0]*w*o1,q.p[1]+q.n[1]*w*o1])});return poly([...A,...B.reverse()])}
+function mound(g,y,cx,w,cast){
+  return (g.opts.shadow?`<g id="${g.id('shadow')}"><path d="M${cx-10} ${y-26}C${cx+70} ${y-52} ${cx+150} ${y-44} ${cx+w} ${y-10}C${cx+150} ${y+4} ${cx+40} ${y+2} ${cx-20} ${y-6}Z" fill="${g.u('cast')}"/></g>`:'');
+}
+
+/* ---------- MITTENS ---------- */
+function mitten(g,k,x,y,rot,sc,side){
+  const body='M-62 124L-66 6C-74 -64 -64 -128 -22 -142C26 -150 66 -112 68 -54L66 124Z',thumb='M-66 26C-100 10 -116 -28 -102 -54C-94 -68 -76 -62 -70 -44L-62 -6Z';
+  const cuff=fluffBand(-80,80,98,150,9,6,10+k.charCodeAt(0),8);
+  const a=side>0?-80:80,b=side>0?80:-80;
+  return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc*side} ${sc})"><defs>${clipMulti(g,'mc'+k,[body,thumb])}${g.clip('cf'+k,cuff)}
+   ${g.lg('mg'+k,a,-140,b,130,[[0,'accent-light',.55],[.4,'accent-light',0],[.7,'accent-dark',0],[1,'accent-dark',.72]])}
+   ${g.lg('cg'+k,0,98,0,150,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}
+   <pattern id="${g.id('dm'+k)}" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M13 3L23 13L13 23L3 13Z" ${g.f('wool-white','opacity=".92"')}/><path d="M13 9L17 13L13 17L9 13Z" ${g.f('accent-dark')}/></pattern>${knitDef(g,'kn'+k)}</defs>
+   <path d="${body}" ${g.f('brand-accent')}/><path d="${thumb}" ${g.f('brand-accent')}/>
+   <g clip-path="url(#${g.id('mc'+k)})"><rect x="-130" y="28" width="260" height="56" ${g.f('accent-dark')}/><rect x="-130" y="28" width="260" height="56" fill="${g.u('dm'+k)}"/><path d="M-130 28H130M-130 84H130" ${g.s('wool-white',4)}/>
+    <path d="${body}" fill="${g.u('mg'+k)}"/><path d="${thumb}" fill="${g.u('mg'+k)}"/>${g.opts.texture?`<rect x="-130" y="-160" width="260" height="300" fill="${g.u('kn'+k)}"/>`:''}
+    <path d="M-66 26L-60 -6" ${g.s('accent-dark',5,'opacity=".55"')}/><path d="M-56 -112C-40 -128 -10 -134 14 -128" ${g.s('accent-light',6,'opacity=".5"')}/></g>
+   <g><path d="${cuff}" fill="${g.u('cg'+k)}"/><g clip-path="url(#${g.id('cf'+k)})"><path d="M-90 98H90V116C30 128 -30 128 -90 116Z" ${g.f('ink','opacity=".1"')}/>${g.opts.texture?woolTex(g,70,-80,104,80,146,40+k.charCodeAt(0),.35):''}</g></g></g>`;
+}
+function drawMittens(g){
+  const A=[168,246,-10,.98,1],B=[326,262,11,.98,-1];
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(18 22)',.2)}${[A,B].map(m=>`<g transform="translate(${m[0]} ${m[1]}) rotate(${m[2]}) scale(${m[3]*m[4]} ${m[3]})"><path d="M-62 124L-66 6C-74 -64 -64 -128 -22 -142C26 -150 66 -112 68 -54L66 124Z" ${g.f('ink')}/><path d="M-66 26C-100 10 -116 -28 -102 -54C-94 -68 -76 -62 -70 -44L-62 -6Z" ${g.f('ink')}/></g>`).join('')}</g>`;
+  o+=`<path d="M168 392C200 440 290 446 330 408" ${g.s('kraft-dark',4)}/>`;
+  o+=`<g id="${g.id('mitten-left')}">${mitten(g,'a',...A)}</g><g id="${g.id('mitten-right')}">${mitten(g,'b',...B)}</g>`;
+  return o;
+}
+
+/* ---------- MISTLETOE ---------- */
+function mleaf(g,x,y,rot,sc,k){const id='ml'+k;return `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)}) scale(${n1(sc)})"><defs>${g.lg(id,0,-28,0,22,[[0,'mist-light'],[.5,'mist-base'],[1,'mist-dark']])}</defs><path d="M0 0C10 -12 24 -28 48 -30C68 -31 82 -16 78 -2C74 14 54 22 34 18C18 14 6 8 0 0Z" fill="${g.u(id)}"/><path d="M0 0C10 -12 24 -28 48 -30C60 -30 70 -24 74 -16C50 -22 24 -12 0 0Z" ${g.f('wool-highlight','opacity=".22"')}/><path d="M2 0C26 -3 52 -5 74 -4" ${g.s('mist-dark',2,'opacity=".7"')}/><path d="M26 -3L38 -17M26 -3L36 10M48 -4L60 -18M48 -4L58 8" ${g.s('mist-dark',1.1,'opacity=".4"')}/></g>`}
+function pearl(g,n,cx,cy,r){cx=+cx;cy=+cy;return `<defs>${g.rg('pl'+n,cx-r*.36,cy-r*.4,r*1.6,[[0,'wool-highlight'],[.5,'snow-white'],[1,'snow-deep']])}</defs><circle cx="${cx}" cy="${cy}" r="${r}" fill="${g.u('pl'+n)}"/><circle cx="${n1(cx+r*.25)}" cy="${n1(cy+r*.78)}" r="${n1(r*.16)}" ${g.f('mist-dark','opacity=".7"')}/>`}
+function drawMistletoe(g){return `<g transform="translate(0 -26)">${drawMistletoe0(g)}</g>`}
+function drawMistletoe0(g){
+  const r=rngf(23),segs=[],nodes=[];
+  const grow=(x,y,ang,len,d)=>{
+    const a=rad(ang),dx=Math.cos(a),dy=Math.sin(a),bend=(r()-.5)*len*.28,px=-dy,py=dx,ex=x+dx*len,ey=y+dy*len;
+    const P=[[x,y],[x+dx*len*.33+px*bend,y+dy*len*.33+py*bend],[x+dx*len*.66+px*bend*.6,y+dy*len*.66+py*bend*.6],[ex,ey]];
+    segs.push({P,d});nodes.push({x:ex,y:ey,ang,d,leaf:d<4});
+    if(d<3){const sp=26+r()*14;grow(ex,ey,ang-sp,len*(.78+r()*.1),d+1);grow(ex,ey,ang+sp+(r()-.5)*8,len*(.74+r()*.12),d+1)}
+  };
+  grow(240,430,-92,112,0);
+  const W=[[15,9],[10,6],[7,4],[5,3]];
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(16 20)',.16)}${segs.map(q=>`<path d="${tube(q.P,W[q.d][0],W[q.d][1]).body}" ${g.f('ink')}/>`).join('')}</g>`;
+  segs.forEach(q=>{const t=tube(q.P,W[q.d][0],W[q.d][1]);o+=`<path d="${t.body}" ${g.f('mist-base')}/><path d="${t.hi}" ${g.f('mist-light')}/><path d="${t.lo}" ${g.f('mist-dark','opacity=".8"')}/>`});
+  nodes.filter(n=>n.d<3).forEach(n=>{o+=`<circle cx="${n1(n.x)}" cy="${n1(n.y)}" r="${[9,6,4.5][n.d]}" ${g.f('mist-base')}/><circle cx="${n1(n.x-2)}" cy="${n1(n.y-2)}" r="${[4,3,2][n.d]}" ${g.f('mist-light')}/>`});
+  let lv='',br='',k=0;
+  nodes.forEach(n=>{
+    const sc=[1.02,.94,.84,.76][n.d]*(.88+r()*.24),sp=40+r()*16;
+    lv+=mleaf(g,n.x,n.y,n.ang-sp,sc,k++)+mleaf(g,n.x,n.y,n.ang+sp+(r()-.5)*10,sc*(.86+r()*.2),k++);
+    if(n.d===3){lv+=mleaf(g,n.x,n.y,n.ang+(r()-.5)*10,sc*.9,k++);}
+    if(n.d>=2){const cx=n.x,cy=n.y;
+      br+=`<path d="M${n1(cx)} ${n1(cy)}l-12 10M${n1(cx)} ${n1(cy)}l12 12M${n1(cx)} ${n1(cy)}l0 -12" ${g.s('mist-dark',2.4)}/>`+pearl(g,'a'+k,n1(cx-12),n1(cy+12),9)+pearl(g,'b'+k,n1(cx+12),n1(cy+14),9)+pearl(g,'c'+k,n1(cx),n1(cy-13),8.4)}
+  });
+  o+=`<g id="${g.id('leaves')}">${lv}</g><g id="${g.id('berries')}">${br}</g>`;
+  o+=`<g id="${g.id('tie')}"><rect x="226" y="396" width="28" height="30" rx="8" ${g.f('kraft')}/><path d="M226 404H254M226 418H254" ${g.s('kraft-dark',3)}/></g><g id="${g.id('bow')}">${bow(g,240,402,.44,0,R_BRAND)}</g>`;
+  return o;
+}
+
+/* ---------- PINE BRANCH ---------- */
+function drawBranchPine(g){return `<g transform="translate(14 -28) scale(.94)">${drawBranchPine0(g)}</g>`}
+function csprig(g,P,seed,L0,pl){
+  pl=pl||['pine-deep','pine-base','pine-mid','pine-light'];
+  const r=rngf(seed);let back='',mid='',front='',hi='';
+  for(let t=.05;t<=1.001;t+=.016){
+    const p=cub(P,t),d=cubd(P,t),ta=Math.atan2(d[1],d[0]),ell=L0*(1-.62*t)*(.82+r()*.36);
+    [-1,1].forEach(sg=>{const J=()=>(r()-.5)*.22,a1=ta+sg*(1.18+J()),a2=ta+sg*(.86+J()),a3=ta+sg*(.58+J());
+      back+=`M${n1(p[0])} ${n1(p[1])}l${n1(ell*1.1*Math.cos(a1))} ${n1(ell*1.1*Math.sin(a1))}`;
+      mid+=`M${n1(p[0])} ${n1(p[1])}l${n1(ell*Math.cos(a2))} ${n1(ell*Math.sin(a2))}`;
+      front+=`M${n1(p[0])} ${n1(p[1])}l${n1(ell*.78*Math.cos(a3))} ${n1(ell*.78*Math.sin(a3))}`;
+      if(r()>.5)hi+=`M${n1(p[0])} ${n1(p[1])}l${n1(ell*.7*Math.cos(a3*1.0))} ${n1(ell*.7*Math.sin(a3))}`});
+  }
+  const tp=pathPts([P],20);
+  return `<path d="M${tp.map(q=>n1(q[0])+' '+n1(q[1])).join('L')}" fill="none" ${g.s('wood-dark',4)}/><path d="${back}" ${g.s(pl[0],4.6)}/><path d="${mid}" ${g.s(pl[1],4.2)}/><path d="${front}" ${g.s(pl[2],3.6)}/><path d="${hi}" ${g.s(pl[3],2.4,'opacity=".8"')}/>`;
+}
+function drawBranchPine0(g){
+  const M=[[60,414],[150,384],[250,290],[420,150]];
+  const side=(t,ang,len,bend,sd)=>branch(M,t,ang,len,bend);
+  const B=[side(.22,-62,150,24),side(.22,56,110,-18),side(.42,-58,150,26),side(.42,60,120,-22),side(.62,-54,130,24),side(.62,56,100,-18),side(.82,-50,90,18)];
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(18 22)',.15)}<path d="${tube(M,30,10).body}" ${g.f('ink')}/>${B.map(P=>`<path d="${tube(P,36,8).body}" ${g.f('ink')}/>`).join('')}</g>`;
+  o+=`<g id="${g.id('boughs')}">${B.map((P,i)=>csprig(g,P,60+i*7,22)).join('')}${csprig(g,M,50,26)}</g>`;
+  const c1=cub(B[2],.55),c2=cub(B[1],.7);
+  o+=`<g id="${g.id('cones')}">${cone(g,n1(c1[0]),n1(c1[1]+34),8,.9)}${cone(g,n1(c2[0]+10),n1(c2[1]+34),-14,.78)}</g>`;
+  const q1=cub(M,.5),q2=cub(B[4],.6);
+  o+=`<g id="${g.id('berries')}">${[[q1[0],q1[1]],[q2[0],q2[1]]].map(([x,y],i)=>berry(g,'p'+i+'a',n1(x-11),n1(y+8),9)+berry(g,'p'+i+'b',n1(x+9),n1(y+10),9)+berry(g,'p'+i+'c',n1(x),n1(y-8),9)).join('')}</g>`;
+  o+=`<g id="${g.id('tie')}"><rect x="50" y="392" width="26" height="46" rx="6" transform="rotate(-30 63 415)" ${g.f('kraft')}/><path d="M46 408L82 428M50 400L86 420" ${g.s('kraft-dark',3)}/>${bow(g,64,414,.4,-30,R_BRAND)}</g>`;
+  return o;
+}
+
+/* ---------- PENGUIN ---------- */
+function drawPenguin(g){return `<g transform="translate(19 26) scale(.92)">${drawPenguin0(g)}</g>`}
+function drawPenguin0(g){
+  const BODY='M240 62C166 62 118 132 120 232C122 334 144 406 184 440H296C336 406 358 334 360 232C362 132 314 62 240 62Z',BELLY='M240 178C206 178 180 232 182 312C184 376 206 420 240 426C274 420 296 376 298 312C300 232 274 178 240 178Z';
+  const hat='M170 98C162 38 200 12 240 12C280 12 318 38 310 98Z',band=fluffBand(160,320,78,112,10,6,7,5),pom=fluffRing(240,6,19,11,5,3);
+  let o=`<defs>${g.clip('pb',BODY)}${g.clip('bel',BELLY)}${g.clip('hh',hat)}
+   ${g.lg('pg',138,0,342,0,[[0,'ink-light'],[.4,'ink'],[1,'ink']])}${g.lg('bg',182,150,300,420,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}${g.lg('nz',0,126,0,168,[[0,'carrot-light'],[.5,'carrot-base'],[1,'carrot-dark']])}${g.lg('cast',200,0,480,0,[[0,'ink',.26],[1,'ink',0]])}${knitDef(g,'knit')}
+   ${g.lg('hg',180,10,300,100,[[0,'accent-light',.5],[.5,'accent-light',0],[1,'accent-dark',.6]])}${g.lg('bd',0,78,0,112,[[0,'wool-highlight'],[1,'wool-shade']])}${g.clip('scf','M160 188C204 214 276 214 320 188L328 230C280 258 200 258 152 230Z')}</defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M220 450C300 428 410 436 480 470C410 482 290 480 220 474Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('feet')}"><path d="M176 434C148 438 122 456 132 470C142 476 154 472 160 468C168 478 184 478 194 470C206 474 224 468 222 446Z" ${g.f('carrot-base')}/><path d="M304 434C332 438 358 456 348 470C338 476 326 472 320 468C312 478 296 478 286 470C274 474 256 468 258 446Z" ${g.f('carrot-base')}/><path d="M176 434C160 440 146 452 142 462M304 434C320 440 334 452 338 462" ${g.s('carrot-light',3,'opacity=".6"')}/><path d="M160 460C170 452 176 446 184 444M178 468C186 458 192 452 200 450M324 460C314 452 308 446 300 444M306 468C298 458 292 452 284 450" ${g.s('carrot-dark',2.4,'opacity=".7"')}/><path d="M154 450C170 440 196 438 212 446" ${g.s('carrot-light',3,'opacity=".7"')}/></g>`;
+  o+=`<g id="${g.id('flippers')}"><path d="M146 196C104 244 96 308 116 354C134 324 150 278 162 234Z" fill="${g.u('pg')}"/><path d="M146 200C112 244 106 296 120 336" ${g.s('ink-light',3,'opacity=".6"')}/><path d="M334 196C376 244 384 308 364 354C346 324 330 278 318 234Z" ${g.f('ink')}/><path d="M334 200C368 246 376 304 362 346" ${g.s('ink-light',2.4,'opacity=".3"')}/></g>`;
+  o+=`<g id="${g.id('body')}"><path d="${BODY}" fill="${g.u('pg')}"/><g clip-path="url(#${g.id('pb')})"><path d="M150 120C146 200 160 300 190 400" ${g.s('ink-light',6,'opacity=".55"')}/><path d="M300 90C330 140 340 220 334 330L360 330V80Z" ${g.f('ink','opacity=".5"')}/></g>
+   <path d="${BELLY}" fill="${g.u('bg')}"/><g clip-path="url(#${g.id('bel')})"><path d="M160 178C230 190 260 190 330 178V230C260 250 230 250 160 230Z" ${g.f('ink','opacity=".16"')}/><path d="M270 180C300 250 296 370 270 426L330 426V180Z" ${g.f('wool-deep','opacity=".35"')}/>${g.opts.texture?furFlow(g,9,170,200,310,430,12,'wool-deep',.4,1):''}</g></g>`;
+  o+=`<g id="${g.id('face')}"><circle cx="208" cy="116" r="10" ${g.f('wool-white')}/><circle cx="272" cy="116" r="10" ${g.f('wool-white')}/><circle cx="210" cy="118" r="5.6" ${g.f('ink')}/><circle cx="274" cy="118" r="5.6" ${g.f('ink')}/><circle cx="208.5" cy="115.5" r="2" ${g.f('wool-highlight')}/><circle cx="272.5" cy="115.5" r="2" ${g.f('wool-highlight')}/>
+   <ellipse cx="196" cy="146" rx="14" ry="8" ${g.f('accent-light','opacity=".32"')}/><ellipse cx="286" cy="146" rx="14" ry="8" ${g.f('accent-light','opacity=".32"')}/>
+   <path d="M206 138C224 122 256 122 274 138C270 162 256 182 240 186C224 182 210 162 206 138Z" fill="${g.u('nz')}"/><path d="M214 140C230 131 250 131 266 140" ${g.s('carrot-light',2.2,'opacity=".8"')}/><path d="M222 152C234 158 246 158 258 152" ${g.s('carrot-dark',1.8,'opacity=".6"')}/></g>`;
+  o+=`<g id="${g.id('scarf')}"><path d="M160 188C204 214 276 214 320 188L328 230C280 258 200 258 152 230Z" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('scf')})"><path d="M150 208C206 236 278 236 332 208" ${g.s('wool-white',7,'opacity=".92"')}/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}<path d="M150 236C210 266 290 258 336 226V270H150Z" ${g.f('accent-dark','opacity=".4"')}/><path d="M160 188C204 212 276 212 320 188" ${g.s('accent-light',4,'opacity=".5"')}/></g>
+   <path d="M266 238L318 228L332 318L280 328Z" ${g.f('brand-accent')}/>${g.opts.texture?`<path d="M266 238L318 228L332 318L280 328Z" fill="${g.u('knit')}"/>`:''}<path d="M280 328L332 318L334 330L282 340Z" ${g.f('accent-dark')}/><path d="M284 340V354M294 338V352M304 336V350M314 334V348M324 332V346" ${g.s('brand-accent',4)}/><path d="M272 272L326 262M276 296L330 286" ${g.s('wool-white',7,'opacity=".92"')}/><path d="M308 232L332 318L320 320L296 234Z" ${g.f('accent-dark','opacity=".35"')}/></g>`;
+  o+=`<g id="${g.id('hat')}" transform="translate(240 100) scale(.8) translate(-240 -100) translate(0 -14)"><path d="${hat}" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('hh')})"><path d="${hat}" fill="${g.u('hg')}"/><path d="M174 92C176 52 198 26 224 18" ${g.s('accent-light',8,'opacity=".5"')}/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}</g><path d="${band}" fill="${g.u('bd')}"/><path d="${pom}" fill="${g.u('bd')}"/></g>`;
+  o+=`<path d="M40 478C96 468 168 466 240 467C312 466 384 468 440 478Z" ${g.f('snow-shade','opacity=".35"')}/>`;
+  return o;
+}
+
+/* ---------- POLAR BEAR ---------- */
+function drawBear(g){
+  const body='M64 478C64 380 138 322 240 322C342 322 416 380 416 478Q240 500 64 478Z';
+  let o=`<defs>${g.clip('bd',body)}${g.clip('hc','M120 226a120 104 0 1 0 240 0a120 104 0 1 0 -240 0Z')}${g.rg('hd',200,170,260,[[0,'snow-white'],[.5,'snow-white'],[.85,'snow-shade'],[1,'snow-deep']])}${g.rg('bg',180,380,320,[[0,'snow-white'],[.6,'snow-shade'],[1,'snow-deep']])}${g.rg('mz',226,262,80,[[0,'wool-highlight'],[1,'snow-shade']])}${g.lg('cast',160,0,480,0,[[0,'ink',.22],[1,'ink',0]])}${knitDef(g,'knit')}
+   <filter id="${g.id('bsb')}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>${g.clip('scf','M112 352C176 394 304 394 368 352L388 408C312 450 168 450 92 408Z')}</defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M300 462C360 444 440 450 480 472C430 484 340 484 290 476Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('body')}"><path d="${body}" fill="${g.u('bg')}"/><g clip-path="url(#${g.id('bd')})">${g.opts.texture?furFlow(g,3,70,350,410,480,12,'snow-deep',.4,1)+furFlow(g,4,70,350,410,480,16,'wool-highlight',.7,1):''}<ellipse cx="248" cy="352" rx="124" ry="40" ${g.f('snow-deep','opacity=".55"')} filter="url(#${g.id('bsb')})"/></g></g>`;
+  o+=`<g id="${g.id('paws')}"><ellipse cx="156" cy="448" rx="46" ry="24" fill="${g.u('hd')}"/><ellipse cx="324" cy="448" rx="46" ry="24" fill="${g.u('hd')}"/><path d="M136 460V444M156 464V446M176 460V444M304 460V444M324 464V446M344 460V444" ${g.s('snow-deep',3,'opacity=".55"')}/><ellipse cx="156" cy="466" rx="40" ry="6" ${g.f('snow-deep','opacity=".35"')}/><ellipse cx="324" cy="466" rx="40" ry="6" ${g.f('snow-deep','opacity=".35"')}/></g>`;
+  o+=`<g id="${g.id('ears')}"><circle cx="116" cy="158" r="36" fill="${g.u('hd')}"/><circle cx="364" cy="158" r="36" fill="${g.u('hd')}"/><circle cx="120" cy="162" r="20" ${g.f('snow-shade')}/><circle cx="360" cy="162" r="20" ${g.f('snow-shade')}/><circle cx="121" cy="164" r="13" ${g.f('wool-deep','opacity=".5"')}/><circle cx="359" cy="164" r="13" ${g.f('wool-deep','opacity=".5"')}/></g>`;
+  o+=`<g id="${g.id('head')}"><g transform="translate(240 226) scale(1.2 1.04) translate(-240 -226)"><path d="${fluffRing(240,226,100,30,5,6)}" fill="${g.u('hd')}"/></g>${g.opts.texture?`<g clip-path="url(#${g.id('hc')})">${furFlow(g,12,120,125,360,330,12,'snow-deep',.2,1)}${furFlow(g,14,120,125,360,330,16,'wool-highlight',.35,1)}</g>`:''}
+   <path d="M132 190C138 150 170 124 210 118" ${g.s('wool-highlight',8,'opacity=".7"')}/>
+   <ellipse cx="240" cy="276" rx="64" ry="48" fill="${g.u('mz')}"/><ellipse cx="190" cy="258" rx="26" ry="14" ${g.f('accent-light','opacity=".3"')}/><ellipse cx="290" cy="258" rx="26" ry="14" ${g.f('accent-light','opacity=".26"')}/></g>`;
+  o+=`<g id="${g.id('face')}"><circle cx="188" cy="204" r="9" ${g.f('ink')}/><circle cx="292" cy="204" r="9" ${g.f('ink')}/><circle cx="185" cy="200" r="3" ${g.f('wool-highlight')}/><circle cx="289" cy="200" r="3" ${g.f('wool-highlight')}/>
+   <path d="M170 186C180 176 198 176 206 184M274 184C282 176 300 176 310 186" ${g.s('snow-deep',3.4,'opacity=".7"')}/>
+   <path d="M212 252C212 238 268 238 268 252C268 266 252 276 240 278C228 276 212 266 212 252Z" ${g.f('ink')}/><ellipse cx="232" cy="248" rx="9" ry="3.4" ${g.f('ink-light')}/><path d="M240 278V298" ${g.s('ink',3.2)}/><path d="M214 302C224 316 238 314 240 298C242 314 256 316 266 302" ${g.s('ink',3.4)}/></g>`;
+  o+=`<g id="${g.id('scarf')}"><path d="M112 352C176 394 304 394 368 352L388 408C312 450 168 450 92 408Z" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('scf')})"><path d="M100 378C176 420 304 420 380 378" ${g.s('wool-white',9,'opacity=".92"')}/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}<path d="M92 416C172 456 312 456 392 410V470H92Z" ${g.f('accent-dark','opacity=".4"')}/><path d="M118 352C180 390 300 390 364 352" ${g.s('accent-light',4,'opacity=".5"')}/></g>
+   <path d="M300 410L366 396L392 478L322 488Z" ${g.f('brand-accent')}/>${g.opts.texture?`<path d="M300 410L366 396L392 478L322 488Z" fill="${g.u('knit')}"/>`:''}<path d="M310 440L376 428M316 458L382 446" ${g.s('wool-white',8,'opacity=".92"')}/><path d="M340 400L392 478L378 482L326 404Z" ${g.f('accent-dark','opacity=".35"')}/></g>`;
+  o+=`<g id="${g.id('hat')}" transform="translate(0 -8)"><defs>${g.clip('bh','M150 176C144 100 190 62 240 62C290 62 336 100 330 176Z')}${g.lg('bhg',150,62,330,176,[[0,'accent-light',.5],[.5,'accent-light',0],[1,'accent-dark',.6]])}${g.lg('bbd',0,150,0,196,[[0,'wool-highlight'],[1,'wool-shade']])}</defs><path d="M150 176C144 100 190 62 240 62C290 62 336 100 330 176Z" ${g.f('brand-accent')}/><g clip-path="url(#${g.id('bh')})"><path d="M150 176C144 100 190 62 240 62C290 62 336 100 330 176Z" fill="${g.u('bhg')}"/>${g.opts.texture?`<rect width="480" height="480" fill="${g.u('knit')}"/>`:''}</g><path d="${fluffBand(138,342,152,194,11,6,9,6)}" fill="${g.u('bbd')}"/><path d="${fluffRing(240,58,20,12,5,4)}" fill="${g.u('bbd')}"/></g>`;
+  return o;
+}
+
+/* ---------- ELF HAT ---------- */
+function drawElfHat(g){
+  const T=ptsTable(pathPts([[[240,432],[232,330],[256,232],[336,160]],[[336,160],[380,120],[436,112],[438,184]]])),wf=s=>Math.max(10,290*Math.pow(1-s/T.L,1.2)+10);
+  const body=taperPoly(T,wf,1,-1),hi=taperPoly(T,wf,.92,.2),lo=taperPoly(T,wf,-.2,-.95);
+  const bx=T.at(T.L).p;
+  let zig='M84 418';{const n=9,x0=84,x1=396;for(let i=0;i<n;i++){const xa=x0+(x1-x0)*i/n,xm=xa+(x1-x0)/n/2;zig+=`L${n1(xm)} ${n1(470+(i%2?-4:3))}L${n1(x0+(x1-x0)*(i+1)/n)} ${n1(436)}`}}
+  const brim=`M84 408C150 392 330 392 396 408L396 438${zig.slice(zig.indexOf('L'))}`.replace(/^(M84 408.*?L396 438)L/,'$1L');
+  const brimShape=fluffBand(78,402,402,462,13,8,9,10);
+  let o=`<defs><clipPath id="${g.id('ec')}"><path d="${body}"/></clipPath>${g.lg('bg',0,404,0,470,[[0,'wool-highlight'],[.5,'wool-white'],[1,'wool-shade']])}${g.rg('bl',bx[0]-8,bx[1]-9,34,[[0,'brass-light'],[.5,'brass-base'],[1,'brass-dark']])}<filter id="${g.id('grain')}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .1  0 0 0 0 0  0 0 0 0 .05  0 0 0 -2.2 1.25"/></filter>${g.clip('bc',brimShape)}</defs>`;
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(20 24)',.2)}<path d="${body}" ${g.f('ink')}/><path d="${brimShape}" ${g.f('ink')}/></g>`;
+  o+=`<g id="${g.id('cone')}"><g clip-path="url(#${g.id('ec')})"><rect width="480" height="480" ${g.f('brand-accent')}/><path d="${lo}" ${g.f('accent-dark','opacity=".6"')}/><path d="${hi}" ${g.f('accent-light','opacity=".55"')}/><path d="M236 410C230 320 250 240 320 170" ${g.s('accent-light',6,'opacity=".4"')}/>${g.opts.texture?`<rect width="480" height="480" filter="url(#${g.id('grain')})" opacity=".26"/>`:''}</g></g>`;
+  o+=`<g id="${g.id('brim')}"><path d="${brimShape}" fill="${g.u('bg')}"/><g clip-path="url(#${g.id('bc')})"><path d="M70 400H410V420C300 432 190 432 70 420Z" ${g.f('ink','opacity=".14"')}/>${g.opts.texture?woolTex(g,150,86,404,396,466,6,.35):''}<path d="M300 400L396 410V470H290Z" ${g.f('wool-deep','opacity=".3"')}/></g></g>`;
+  o+=`<g id="${g.id('bell')}"><circle cx="${n1(bx[0])}" cy="${n1(bx[1]+6)}" r="22" fill="${g.u('bl')}"/><path d="M${n1(bx[0]-18)} ${n1(bx[1]+10)}Q${n1(bx[0])} ${n1(bx[1]+16)} ${n1(bx[0]+18)} ${n1(bx[1]+10)}" ${g.s('brass-dark',2.4,'opacity=".7"')}/><circle cx="${n1(bx[0]-8)}" cy="${n1(bx[1]-2)}" r="5" ${g.f('wool-highlight','opacity=".8"')}/></g>`;
+  o+=`<g id="${g.id('holly')}">${holly(g,128,412,-150,1.1)}${holly(g,132,412,-20,1.0,-1)}${holly(g,134,414,-95,.9)}</g><g id="${g.id('berries')}">${berry(g,'e1',132,420,9)}${berry(g,'e2',150,424,9)}${berry(g,'e3',140,406,8)}</g>`;
+  return o;
+}
+
+/* =====================================================================
+   BATCH 4
+===================================================================== */
+const litRole=(ang)=>{const l=Math.cos(rad(ang)-rad(-135));return l>.45?['accent-light','brand-accent']:l>-.35?['brand-accent','accent-dark']:['accent-dark','accent-dark']};
+/* ---------- SNOWFLAKE ---------- */
+function drawSnowflake(g){
+  const cx=240,cy=240,rt=(x,y)=>[x,y];
+  const kite=(y,l,a,w,sd)=>{const s=Math.sin(rad(a))*sd,c=Math.cos(rad(a)),tip=[s*l,y-c*l],nx=c*sd,ny=s;const b0=[-0,y-w],b1=[0,y+w*1.1],m=[0,y+1];
+    const wd=[tip[0]*.42+nx*w*.9*-1,tip[1]*.42+ny*w*.9*-1],wd2=[tip[0]*.42+nx*w*.9,tip[1]*.42+ny*w*.9];
+    return {up:[b0,wd,tip,m],dn:[m,tip,wd2,b1]}};
+  const BR=[[-76,70,52,5],[-116,52,50,4.4],[-152,32,48,3.8]];
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(14 18)',.18)}${[0,1,2,3,4,5].map(k=>`<g transform="translate(${cx} ${cy}) rotate(${k*60})"><path d="M0 -30L8 -40L8 -184L0 -214L-8 -184L-8 -40Z" ${g.f('ink')}/>${BR.map(([y,l,a])=>[1,-1].map(sd=>`<path d="${poly([[0,y-8],[Math.sin(rad(a))*l*sd,y-Math.cos(rad(a))*l],[0,y+8]])}" ${g.f('ink')}/>`).join('')).join('')}</g>`).join('')}</g>`;
+  for(let k=0;k<6;k++){const ang=k*60,A='accent-light',B='brand-accent';
+    o+=`<g transform="translate(${cx} ${cy}) rotate(${ang})"><path d="${poly([[0,-30],[-8,-40],[-8,-184],[0,-214]])}" ${g.f(A)}/><path d="${poly([[0,-30],[8,-40],[8,-184],[0,-214]])}" ${g.f(B)}/><path d="M0 -44L0 -196" ${g.s('wool-highlight',1.8,'opacity=".55"')}/>`;
+    BR.forEach(([y,l,a,w])=>[-1,1].forEach(sd=>{const b=kite(y,l,a,w,sd);o+=`<path d="${poly(b.up)}" ${g.f(sd<0?A:B)}/><path d="${poly(b.dn)}" ${g.f('brand-accent')}/>`}));
+    o+=`<path d="M0 -222L7 -214L0 -206L-7 -214Z" ${g.f('wool-highlight','opacity=".9"')}/>`;
+    o+=`<path d="M0 -92L5 -84L0 -76L-5 -84Z" ${g.f('wool-highlight','opacity=".75"')}/></g>`}
+  const H=[],H2=[];for(let i=0;i<6;i++){const a=rad(-90+i*60);H.push([cx+44*Math.cos(a),cy+44*Math.sin(a)]);H2.push([cx+26*Math.cos(a),cy+26*Math.sin(a)])}
+  o+=`<g id="${g.id('core')}">`;for(let i=0;i<6;i++){const j=(i+1)%6,ang=(i*60+30-90),[A]=litRole(ang);o+=`<path d="${poly([[cx,cy],H[i],H[j]])}" ${g.f(A)} stroke="${g.pal[A]}" stroke-width="1" stroke-linejoin="round"/>`}
+  o+=`<path d="${poly(H)}" fill="none" stroke="${g.pal['wool-highlight']}" stroke-width="3" stroke-linejoin="round" opacity=".75" class="wool-highlight"/><path d="${poly(H2)}" ${g.f('wool-highlight','opacity=".9"')}/><path d="${poly(H2)}" ${g.f('brand-accent','opacity=".55"')}/><circle cx="${cx}" cy="${cy}" r="7" ${g.f('wool-highlight')}/></g>`;g.used.add('wool-highlight');
+  return o;
+}
+
+/* ---------- GINGERBREAD MAN ---------- */
+function drawGinger(g){
+  const arm=(sd)=>[[240+sd*44,196],[240+sd*98,196],[240+sd*140,176],[240+sd*176,140]];
+  const leg=(sd)=>[[240+sd*24,300],[240+sd*34,342],[240+sd*52,382],[240+sd*66,416]];
+  const shapes=[];
+  const shp=(d,tr)=>shapes.push(d);
+  const LB=[[arm(-1),48],[arm(1),48],[leg(-1),54],[leg(1),54]],lp=P=>`M${P[0][0]} ${P[0][1]}C${P[1][0]} ${P[1][1]} ${P[2][0]} ${P[2][1]} ${P[3][0]} ${P[3][1]}`;
+  const ALL=['M240 176C294 176 318 212 314 262C310 316 280 340 240 340C200 340 170 316 166 262C162 212 186 176 240 176Z','M240 36a66 62 0 1 0 .1 0Z'];
+  const union=(extra,mode)=>LB.map(([P,w])=>`<path d="${lp(P)}" fill="none" stroke="${mode==='fill'?'url(#'+g.id('gg')+')':mode==='shadow'?g.pal['ink']:g.pal['ginger-dark']}" stroke-width="${w+(mode==='fill'?0:10)}" stroke-linecap="round" ${mode==='shadow'?'class="ink"':mode==='fill'?'':'class="ginger-dark"'}/>`).join('')+ALL.map(d=>`<path d="${d}" ${extra}/>`).join('');
+  let o=`<defs>${g.lg('gg',100,30,380,440,[[0,'ginger-light'],[.45,'ginger-base'],[1,'ginger-dark']])}${g.rg('gd',-4,-4,18,[[0,'accent-light'],[.5,'brand-accent'],[1,'accent-dark']])}</defs>`;
+  g.used.add('ginger-dark');g.used.add('ginger-light');
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(20 24)',.2)}<g transform="translate(0 12)">${union(g.f('ink'),'shadow')}</g></g>`;
+  o+=`<g id="${g.id('cookie')}"><g transform="translate(0 12)">${union(g.f('ginger-dark')+' stroke="'+g.pal['ginger-dark']+'" stroke-width="10" stroke-linejoin="round"','edge')}</g>${union(g.f('ginger-dark')+' stroke="'+g.pal['ginger-dark']+'" stroke-width="10" stroke-linejoin="round"','edge')}${union('fill="'+g.u('gg')+'"','fill')}`;
+  o+=`<g>${LB.map(([P])=>`<path d="${lp(P)}" ${g.s('ginger-light',8,'opacity=".35"')} transform="translate(-6 -6)"/>`).join('')}<path d="M190 200C176 240 180 300 206 326" ${g.s('ginger-light',9,'opacity=".4"')}/><path d="M210 52C186 66 176 96 182 124" ${g.s('ginger-light',9,'opacity=".4"')}/></g>`;
+  o+=`<g ${g.f('ginger-dark','opacity=".3"')}>${(()=>{const r=rngf(8);let d='';for(let i=0;i<160;i++){const x=90+r()*300,y=40+r()*400;if(!(((x-240)/62)**2+((y-98)/58)**2<.85||((x-240)/66)**2+((y-258)/78)**2<.85))continue;d+=`<circle cx="${n1(x)}" cy="${n1(y)}" r="${n1(1+r()*1.6)}"/>`}return d})()}</g></g>`;
+  // piped icing: cuffs, anklets, collar scallops
+  const wav=(x0,y0,x1,y1,n,amp)=>{let d=`M${x0} ${y0}`;const dx=(x1-x0)/n,dy=(y1-y0)/n,nx=-(y1-y0),ny=(x1-x0),l=Math.hypot(nx,ny);for(let k=0;k<n;k++){const mx=x0+dx*(k+.5)+nx/l*amp*(k%2?-1:1),my=y0+dy*(k+.5)+ny/l*amp*(k%2?-1:1);d+=`Q${n1(mx)} ${n1(my)} ${n1(x0+dx*(k+1))} ${n1(y0+dy*(k+1))}`}return d};
+  o+=`<g id="${g.id('icing')}">
+    <path d="${wav(72,168,102,138,4,4)}" ${g.s('wool-white',6)}/><path d="${wav(408,168,378,138,4,4)}" ${g.s('wool-white',6)}/>
+    <path d="${wav(159,390,213,390,5,4)}" ${g.s('wool-white',6)}/><path d="${wav(267,390,321,390,5,4)}" ${g.s('wool-white',6)}/>
+    <path d="${wav(190,252,290,252,8,5)}" ${g.s('wool-white',5,'opacity="0"')}/></g>`;
+  o+=`<g id="${g.id('face')}"><circle cx="214" cy="86" r="8" ${g.f('ink')}/><circle cx="266" cy="86" r="8" ${g.f('ink')}/><circle cx="211.5" cy="83.5" r="2.6" ${g.f('wool-highlight')}/><circle cx="263.5" cy="83.5" r="2.6" ${g.f('wool-highlight')}/>
+    <path d="M208 112C224 132 256 132 272 112" ${g.s('wool-white',6)}/><ellipse cx="192" cy="104" rx="11" ry="7" ${g.f('accent-light','opacity=".45"')}/><ellipse cx="288" cy="104" rx="11" ry="7" ${g.f('accent-light','opacity=".45"')}/></g>`;
+  o+=`<g id="${g.id('bow')}"><path d="M240 168C212 146 186 152 190 172C194 190 220 186 240 168Z" ${g.f('brand-accent')}/><path d="M240 168C268 146 294 152 290 172C286 190 260 186 240 168Z" ${g.f('brand-accent')}/><path d="M240 168C264 156 284 160 286 172C264 176 252 174 240 168Z" ${g.f('accent-dark','opacity=".45"')}/><rect x="229" y="157" width="22" height="24" rx="8" ${g.f('accent-dark')}/><path d="M196 160C206 156 220 158 230 166" ${g.s('accent-light',3,'opacity=".8"')}/></g>`;
+  o+=`<g id="${g.id('buttons')}">${[236,278,320].map(y=>`<g transform="translate(240 ${y})"><circle r="15" fill="${g.u('gd')}"/><circle cx="-5" cy="-5" r="4" ${g.f('wool-highlight','opacity=".7"')}/></g>`).join('')}</g>`;
+  return o;
+}
+
+/* ---------- HOLLY ---------- */
+function drawHolly(g){return `<g transform="translate(0 -24)">${drawHolly0(g)}</g>`}
+function drawHolly0(g){
+  const S=[[104,404],[150,320],[220,250],[368,120]];
+  let o=`<defs>${g.lg('hl',0,-30,0,30,[[0,'pine-light'],[.45,'pine-mid'],[1,'pine-deep']])}</defs>`;
+  const leaf=(x,y,rot,sc,fl)=>`<g transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)}) scale(${sc} ${sc*fl})"><path d="M0 0C8 -16 26 -22 38 -14L46 -26L54 -12L68 -14L64 -2L74 8L58 10L56 24L40 16C26 22 8 16 0 0Z" fill="${g.u('hl')}"/><path d="M0 0C8 -16 26 -22 38 -14L46 -26L54 -12L68 -14L64 -2L74 2L0 0Z" ${g.f('pine-light','opacity=".4"')}/><path d="M2 1C26 1 50 -1 70 -1" ${g.s('pine-deep',1.4,'opacity=".6"')}/><path d="M22 0L38 -10M22 0L36 10M44 -1L56 -9M44 -1L54 8" ${g.s('pine-deep',1,'opacity=".4"')}/></g>`;
+  const nodes=[[.84,1.2,62],[.68,1.5,70],[.52,1.8,76],[.38,2.0,84]];
+  let lv='';
+  lv+=(()=>{const p=cub(S,1),d=cubd(S,1),a=Math.atan2(d[1],d[0])*180/PI;return leaf(p[0],p[1],a,1.3,1)})();
+  nodes.forEach(([t,sc,sp])=>{const p=cub(S,t),d=cubd(S,t),a=Math.atan2(d[1],d[0])*180/PI;lv+=leaf(p[0],p[1],a-sp,sc,-1)+leaf(p[0],p[1],a+sp+6,sc*.92,1)});
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(16 20)',.16)}<path d="${tube(S,12,6).body}" ${g.f('ink')}/><g ${g.f('ink')}>${lv.replace(/fill="url\([^)]*\)"/g,'')}</g></g>`;
+  const st=tube(S,14,5);
+  o+=`<path d="${st.body}" ${g.f('wood-base')}/><path d="${st.hi}" ${g.f('wood-light')}/><path d="${st.lo}" ${g.f('wood-dark')}/>`;
+  o+=`<g id="${g.id('leaves')}">${lv}</g>`;
+  const bp=cub(S,.26);
+  o+=`<g id="${g.id('berries')}">${berry(g,'h1',bp[0]-24,bp[1]+14,17)}${berry(g,'h2',bp[0]+6,bp[1]+22,17)}${berry(g,'h3',bp[0]-8,bp[1]-10,16)}${berry(g,'h4',bp[0]+26,bp[1]+2,14)}</g>`;
+  o+=`<g id="${g.id('bow')}">${bow(g,112,392,.5,28,R_BRAND)}</g>`;
+  return o;
+}
+
+/* ---------- COCOA MUG ---------- */
+function drawMug(g){
+  const body='M118 160V372C118 416 162 440 240 440C318 440 362 416 362 372V160Z';
+  const hd=tube([[354,206],[432,196],[440,334],[350,350]],26,26);
+  let o=`<defs>${g.clip('mg',body)}${g.lg('mb',118,0,362,0,[[0,'accent-dark',.0],[0,'accent-light'],[.28,'accent-light'],[.5,'brand-accent'],[.85,'accent-dark'],[1,'accent-dark']])}${g.lg('ck',0,150,0,190,[[0,'wood-light'],[1,'wood-dark']])}${g.lg('cast',100,0,480,0,[[0,'ink',.26],[1,'ink',0]])}
+    <pattern id="${g.id('dia')}" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M13 3L23 13L13 23L3 13Z" ${g.f('wool-white','opacity=".92"')}/><path d="M13 9L17 13L13 17L9 13Z" ${g.f('accent-dark')}/></pattern>
+    <filter id="${g.id('st')}" x="-40%" y="-10%" width="180%" height="120%"><feGaussianBlur stdDeviation="3"/></filter></defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M200 440C300 428 420 436 476 466C420 480 300 480 190 462Z" fill="${g.u('cast')}"/></g>`;
+  o+=`<g id="${g.id('handle')}"><path d="${hd.body}" ${g.f('accent-dark')}/><path d="${hd.hi}" ${g.f('brand-accent')}/><path d="${hd.lo}" ${g.f('accent-dark')}/></g>`;
+  o+=`<g id="${g.id('mug')}"><path d="${body}" fill="${g.u('mb')}"/><g clip-path="url(#${g.id('mg')})"><path d="M110 258Q240 292 370 258V310Q240 344 110 310Z" ${g.f('accent-dark')}/><path d="M110 258Q240 292 370 258V310Q240 344 110 310Z" fill="${g.u('dia')}"/><path d="M110 258Q240 292 370 258M110 310Q240 344 370 310" ${g.s('wool-white',4)}/>
+    <path d="M110 258Q240 292 370 258V310Q240 344 110 310Z" fill="${g.u('mb')}" opacity=".35"/><path d="M152 176V400" ${g.s('wool-highlight',10,'opacity=".28"')}/><path d="M134 176V380" ${g.s('wool-highlight',4,'opacity=".5"')}/>
+    <path d="M118 400C150 430 330 430 362 400V450H118Z" ${g.f('ink','opacity=".18"')}/></g>
+   <ellipse cx="240" cy="160" rx="122" ry="32" ${g.f('accent-light')}/><ellipse cx="240" cy="164" rx="108" ry="25" ${g.f('accent-dark')}/><ellipse cx="240" cy="166" rx="106" ry="23" fill="${g.u('ck')}"/>
+   <path d="M130 156C160 130 320 130 350 156" ${g.s('wool-highlight',3,'opacity=".6"')}/></g>`;
+  // cocoa extras: cinnamon stick + marshmallows
+  const mm=(x,y,r,rot)=>`<g transform="translate(${x} ${y}) rotate(${rot})"><rect x="-22" y="-16" width="44" height="32" rx="10" ${g.f('wool-white')}/><rect x="-22" y="-16" width="44" height="12" rx="6" ${g.f('wool-highlight')}/><path d="M-22 4C-22 14 -14 16 -4 16H12C20 16 22 12 22 4Z" ${g.f('wool-shade')}/></g>`;
+  const cs=tube([[290,190],[318,120],[346,70],[372,40]],14,14);
+  o+=`<g id="${g.id('cinnamon')}"><path d="${cs.body}" ${g.f('wood-base')}/><path d="${cs.hi}" ${g.f('wood-light')}/><path d="${cs.lo}" ${g.f('wood-dark')}/></g>`;
+  o+=`<g id="${g.id('marshmallows')}">${mm(200,162,20,-8)}${mm(248,158,20,10)}${mm(224,176,20,2)}</g>`;
+  o+=`<g id="${g.id('steam')}" filter="url(#${g.id('st')})"><path d="M196 120C178 96 214 80 196 52C186 36 200 20 212 12" ${g.s('wool-shade',9,'opacity=".5"')}/><path d="M244 116C226 92 262 76 244 48C234 32 248 16 260 8" ${g.s('wool-shade',8,'opacity=".42"')}/></g>`;
+  return o;
+}
+
+/* ---------- SNOW GLOBE ---------- */
+function drawGlobe(g){
+  const cx=240,cy=200,R=150;
+  let o=`<defs>${g.clip('gl',`M${cx-R} ${cy}a${R} ${R} 0 1 0 ${2*R} 0a${R} ${R} 0 1 0 ${-2*R} 0Z`)}
+   ${g.rg('gb',cx-30,cy-60,R*1.1,[[0,'snow-white',.55],[.6,'snow-shade',.28],[1,'snow-deep',.5]])}${g.rg('in',cx,cy+40,R*1.2,[[0,'snow-white'],[.7,'snow-shade'],[1,'snow-deep']])}
+   ${g.lg('bs',100,0,380,0,[[0,'accent-light'],[.3,'brand-accent'],[.8,'accent-dark'],[1,'accent-dark']])}${g.lg('br',100,0,380,0,[[0,'brass-light'],[.3,'brass-base'],[1,'brass-dark']])}${g.lg('cast',200,0,480,0,[[0,'ink',.24],[1,'ink',0]])}</defs>`;
+  if(g.opts.shadow)o+=`<g id="${g.id('shadow')}"><path d="M300 450C370 438 440 444 478 468C420 480 340 480 290 472Z" fill="${g.u('cast')}"/></g>`;
+  // base
+  o+=`<g id="${g.id('base')}"><path d="M110 376C130 410 350 410 370 376L398 452C380 470 100 470 82 452Z" fill="${g.u('bs')}"/><path d="M82 452C100 470 380 470 398 452V462C380 480 100 480 82 462Z" ${g.f('accent-dark')}/><ellipse cx="240" cy="372" rx="132" ry="26" fill="${g.u('br')}"/><path d="M98 380C140 404 340 404 382 380" ${g.s('brass-dark',3,'opacity=".6"')}/>
+    <path d="M110 430C160 446 320 446 370 430" ${g.s('wool-white',5,'opacity=".9"')}/><g ${g.f('brass-light')}>${[0,1,2,3,4,5,6,7,8].map(i=>`<circle cx="${130+i*27}" cy="${n1(414+10*Math.sin(Math.PI*i/8))}" r="3"/>`).join('')}</g><path d="M104 392C112 420 124 440 136 452" ${g.s('accent-light',6,'opacity=".5"')}/></g>`;
+  // scene inside
+  const treeS=`<path d="M240 170L276 232L258 226L286 272L262 266L296 290H184L218 266L194 272L222 226L204 232Z" ${g.f('pine-mid')}/><path d="M240 170L204 232L222 226L194 272L218 266L184 290H240Z" ${g.f('pine-light','opacity=".6"')}/><path d="M240 170L276 232L258 226L286 272L262 266L296 290H240Z" ${g.f('pine-deep','opacity=".5"')}/><path d="M216 232Q240 248 264 232M204 270Q240 288 276 270" ${g.s('brass-base',3)}/><g ${g.f('brand-accent')}>${[[226,250],[254,252],[240,278],[212,284],[268,284]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6"/>`).join('')}</g><path d="${poly([[240,150],[246,164],[262,166],[250,176],[254,192],[240,184],[226,192],[230,176],[218,166],[234,164]])}" ${g.f('brass-base')}/><rect x="235" y="290" width="10" height="12" ${g.f('wood-dark')}/>`;
+  const tr=(x,y,sc)=>`<g transform="translate(${x} ${y}) scale(${sc}) translate(-240 -296)">${treeS}</g>`;
+  o+=`<g id="${g.id('scene')}"><g clip-path="url(#${g.id('gl')})"><rect x="${cx-R}" y="${cy-R}" width="${2*R}" height="${2*R}" ${g.f('snow-white','opacity=".18"')}/>
+    ${g.rg('moon',330,110,60,[[0,'brass-light',.5],[1,'brass-light',0]])}<circle cx="330" cy="110" r="60" fill="${g.u('moon')}"/><circle cx="330" cy="110" r="17" ${g.f('wool-highlight','opacity=".9"')}/>
+    <path d="M60 296C120 262 170 262 240 272C310 262 370 262 420 296V380H60Z" ${g.f('pine-mid','opacity=".28"')}/>
+    <path d="M60 312C130 276 200 284 240 290C300 282 360 274 420 312V380H60Z" fill="${g.u('in')}"/><path d="M60 312C130 276 200 284 240 290C300 282 360 274 420 312" ${g.s('wool-highlight',3,'opacity=".85"')}/>
+    <path d="M150 330C190 312 270 312 330 330" ${g.s('snow-deep',2.4,'opacity=".25"')}/>
+    ${tr(150,318,.62)}${tr(338,320,1.3)}
+    <g id="${g.id('cottage')}"><ellipse cx="226" cy="298" rx="62" ry="9" ${g.f('snow-deep','opacity=".3"')}/><path d="M178 296V236H266V296Z" ${g.f('wool-white')}/><path d="M236 236H266V296H236Z" ${g.f('wool-shade','opacity=".7"')}/><path d="M166 242L222 190L278 242Z" ${g.f('brand-accent')}/><path d="M222 190L278 242H250Z" ${g.f('accent-dark','opacity=".6"')}/><path d="M168 240L222 192" ${g.s('accent-light',5,'opacity=".7"')}/><path d="M164 244H280" ${g.s('snow-white',7)}/><rect x="190" y="254" width="26" height="24" rx="3" ${g.f('brass-light')}/><path d="M203 254V278M190 266H216" ${g.s('wood-dark',2.4)}/><rect x="238" y="258" width="20" height="38" rx="3" ${g.f('wood-base')}/><rect x="248" y="204" width="12" height="22" ${g.f('wood-dark')}/><rect x="245" y="200" width="18" height="7" rx="3" ${g.f('snow-white')}/></g>
+    ${(()=>{const r=rngf(4);let d='';for(let i=0;i<46;i++){d+=`<circle cx="${n1(120+r()*240)}" cy="${n1(80+r()*250)}" r="${n1(1.6+r()*2.4)}"/>`}return `<g ${g.f('wool-highlight','opacity=".95"')}>${d}</g>`})()}</g></g>`;
+  o+=`<g id="${g.id('glass')}"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${g.u('gb')}"/><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${g.pal['snow-deep']}" stroke-width="3" opacity=".6" class="snow-deep"/>
+    <path d="M118 150C130 106 168 74 214 64" ${g.s('wool-highlight',10,'opacity=".75"')}/><path d="M104 190C106 176 108 166 112 156" ${g.s('wool-highlight',5,'opacity=".6"')}/><path d="M366 256C358 292 336 322 304 338" ${g.s('wool-highlight',5,'opacity=".4"')}/></g>`;
+  g.used.add('snow-deep');
+  return o;
+}
+
+/* ---------- ORNAMENT TRIO ---------- */
+function orn(g,k,cx,cy,R,style){
+  const roles=style==='dots'?['wool-highlight','wool-white','wool-deep']:style==='diamonds'?['brass-light','brass-base','brass-dark']:['accent-light','brand-accent','accent-dark'];
+  const clip=`M${cx-R} ${cy}a${R} ${R} 0 1 0 ${2*R} 0a${R} ${R} 0 1 0 ${-2*R} 0Z`;
+  let pat='';
+  if(style==='band')pat=`<g transform="rotate(-12 ${cx} ${cy})"><path d="M${cx-R} ${cy-R*.18}Q${cx} ${cy+R*.2} ${cx+R} ${cy-R*.18}V${cy+R*.2}Q${cx} ${cy+R*.58} ${cx-R} ${cy+R*.2}Z" ${g.f('wool-white')}/><path d="M${cx-R} ${cy-R*.18}Q${cx} ${cy+R*.2} ${cx+R} ${cy-R*.18}M${cx-R} ${cy+R*.2}Q${cx} ${cy+R*.58} ${cx+R} ${cy+R*.2}" ${g.s('brass-base',2.4)}/></g>`;
+  if(style==='diamonds'){for(let r=-2;r<=2;r++)for(let c=-3;c<=3;c++){const x=cx+c*R*.3+(r%2?R*.15:0),y=cy+r*R*.3,s=R*.1;pat+=`<path d="M${n1(x)} ${n1(y-s*1.5)}L${n1(x+s)} ${n1(y)}L${n1(x)} ${n1(y+s*1.5)}L${n1(x-s)} ${n1(y)}Z" ${g.f('brand-accent','opacity=".92"')}/>`}}
+  if(style==='dots'){for(let r=-3;r<=3;r++)for(let c=-4;c<=4;c++){const x=cx+c*R*.24+(r%2?R*.12:0),y=cy+r*R*.24;pat+=`<circle cx="${n1(x)}" cy="${n1(y)}" r="${n1(R*.055)}" ${g.f('brand-accent')}/>`}}
+  return `<defs>${g.clip('oc'+k,clip)}${g.rg('os'+k,cx-R*.36,cy-R*.42,R*1.7,[[0,roles[0]],[.4,roles[1]],[1,roles[2]]])}${g.rg('osh'+k,cx+R*.1,cy+R*.2,R*1.1,[[0,'ink',0],[.6,'ink',0],[.9,'ink',.2],[1,'ink',.4]])}${g.lg('oc2'+k,cx-R*.18,0,cx+R*.18,0,[[0,'brass-light'],[.35,'brass-base'],[1,'brass-dark']])}</defs>
+   <circle cx="${cx}" cy="${cy}" r="${R}" fill="${g.u('os'+k)}"/><g clip-path="url(#${g.id('oc'+k)})">${pat}<circle cx="${cx}" cy="${cy}" r="${R}" fill="${g.u('osh'+k)}"/></g>
+   <path d="M${n1(cx-R*.64)} ${n1(cy-R*.1)}A${n1(R*.66)} ${n1(R*.66)} 0 0 1 ${n1(cx-R*.14)} ${n1(cy-R*.64)}" ${g.s('wool-highlight',R*.1,'opacity=".7"')}/><ellipse cx="${n1(cx-R*.36)}" cy="${n1(cy-R*.56)}" rx="${R*.1}" ry="${R*.045}" transform="rotate(-30 ${cx-R*.36} ${cy-R*.56})" ${g.f('wool-highlight','opacity=".9"')}/>
+   <rect x="${n1(cx-R*.2)}" y="${n1(cy-R-R*.2)}" width="${n1(R*.4)}" height="${n1(R*.26)}" rx="3" fill="${g.u('oc2'+k)}"/><rect x="${n1(cx-R*.25)}" y="${n1(cy-R-R*.26)}" width="${n1(R*.5)}" height="${n1(R*.1)}" rx="4" fill="${g.u('oc2'+k)}"/>`;
+}
+function drawOrnaments(g){
+  const A=[148,262,66,'diamonds'],B=[330,248,58,'dots'],C=[240,350,82,'band'];
+  const top=o=>[o[0],o[1]-o[2]-o[2]*.3];
+  let o='';
+  if(g.opts.shadow)o+=`${shadowOpen(g,'translate(18 22)',.18)}${[A,B,C].map(b=>`<circle cx="${b[0]}" cy="${b[1]}" r="${b[2]}" ${g.f('ink')}/>`).join('')}</g>`;
+  const rr=(t,cx,dx)=>ribbon(g,[[240,80],[240+dx,130],[t[0]+dx*.3,t[1]-70],[t[0],t[1]+8]],13,12);
+  o+=`<g id="${g.id('orn-a')}">${orn(g,'a',...A)}</g><g id="${g.id('orn-b')}">${orn(g,'b',...B)}</g><g id="${g.id('orn-c')}">${orn(g,'c',...C)}</g>`;
+  o+=`<g id="${g.id('ribbons')}">${rr(top(A),A[0],-30)}${rr(top(B),B[0],30)}${rr(top(C),C[0],0)}</g>`;
+  o+=`<g id="${g.id('holly')}">${holly(g,236,74,196,.9)}${holly(g,244,74,-16,.9,-1)}${holly(g,240,72,-100,.7)}</g><g id="${g.id('berries')}">${berry(g,'o1',228,84,8)}${berry(g,'o2',250,88,8)}${berry(g,'o3',238,70,7)}</g>`;
+  o+=`<g id="${g.id('bow')}">${bow(g,240,54,.5,0,R_BRAND)}</g>`;
+  return o;
+}
+
+/* =====================================================================
+   ASSET LIST
+===================================================================== */
+const ASSETS=[
+  {id:'santa-hat',name:'Santa hat',cat:'Hats',tags:['christmas hat','cap'],draw:drawHat},
+  {id:'christmas-tree',name:'Christmas tree',cat:'Trees',tags:['pine','fir','star'],draw:drawTree},
+  {id:'bauble',name:'Bauble',cat:'Ornaments',tags:['ball','ornament'],draw:drawBauble},
+  {id:'wreath',name:'Wreath',cat:'Wreaths',tags:['door','pine','bow'],draw:drawWreath},
+  {id:'gift-box',name:'Gift box',cat:'Gifts',tags:['present','ribbon'],draw:drawGift},
+  {id:'reindeer',hidden:true,name:'Reindeer',cat:'Animals',tags:['rudolph','deer','antlers'],draw:drawReindeer},
+  {id:'candy-cane',name:'Candy cane',cat:'Treats',tags:['sweet','peppermint','stripe'],draw:drawCane},
+  {id:'stocking',name:'Stocking',cat:'Stockings',tags:['sock','fireplace','knit'],draw:drawStocking},
+  {id:'bells',name:'Bells',cat:'Bells',tags:['jingle','holly','brass'],draw:drawBells},
+  {id:'candles',name:'Candles',cat:'Candles',tags:['light','flame','advent'],draw:drawCandles},
+  {id:'snowman',name:'Snowman',cat:'Characters',tags:['winter','snow','scarf'],draw:drawSnowman},
+  {id:'star',name:'Star',cat:'Stars',tags:['topper','sparkle','ornament'],draw:drawStar},
+  {id:'mittens',name:'Mittens',cat:'Winter wear',tags:['gloves','knit','nordic'],draw:drawMittens},
+  {id:'mistletoe',name:'Mistletoe',cat:'Greenery',tags:['kiss','berries','plant'],draw:drawMistletoe},
+  {id:'pine-branch',hidden:true,name:'Pine branch',cat:'Greenery',tags:['fir','cones','evergreen'],draw:drawBranchPine},
+  {id:'penguin',hidden:true,name:'Penguin',cat:'Characters',tags:['winter','animal','scarf'],draw:drawPenguin},
+  {id:'polar-bear',hidden:true,name:'Polar bear',cat:'Characters',tags:['winter','animal','arctic'],draw:drawBear},
+  {id:'elf-hat',name:'Elf hat',cat:'Hats',tags:['elf','christmas hat','bell'],draw:drawElfHat},
+  {id:'snowflake',name:'Snowflake',cat:'Winter',tags:['snow','ice','crystal'],draw:drawSnowflake},
+  {id:'gingerbread',name:'Gingerbread man',cat:'Treats',tags:['cookie','biscuit','sweet'],draw:drawGinger},
+  {id:'holly',hidden:true,name:'Holly',cat:'Greenery',tags:['berries','leaves','plant'],draw:drawHolly},
+  {id:'cocoa-mug',name:'Hot cocoa',cat:'Treats',tags:['mug','drink','marshmallow'],draw:drawMug},
+  {id:'snow-globe',name:'Snow globe',cat:'Ornaments',tags:['glass','winter','scene'],draw:drawGlobe},
+  {id:'ornaments',name:'Hanging ornaments',cat:'Ornaments',tags:['baubles','balls','decor'],draw:drawOrnaments},
+];
+
+/* =====================================================================
+   STATE + RENDERING
+===================================================================== */
+const PRESETS=['#b3263a','#c4561e','#d4a017','#2f7d5a','#0f766e','#2d5bd6','#6b3fa0','#2a2f3d'];
+const S={brand:'#b3263a',fmt:'svg',size:512,shadow:true,texture:true,bg:'light',mode:'flat',q:'',cat:'All',sel:new Set()};
+
+function render1(a,prefix,mode){
+  const g=makeG(prefix,palette(S.brand),mode||'flat',{shadow:S.shadow,texture:S.texture});
+  const body=a.draw(g);
+  return {body,g};
+}
+function inlineSvg(a,prefix,extraAttrs=''){
+  const {body}=render1(a,prefix,'flat');
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 480" ${extraAttrs}>${body}</svg>`;
+}
+function svgFile(a,size){
+  const {body,g}=render1(a,'',S.mode);
+  const roles=[...g.used];
+  const sid='seasonal-'+a.id;
+  const head=`<!-- ${a.name}. Colour roles: ${roles.map(r=>r+' '+g.pal[r]).join(', ')}. Change brand-accent, accent-light and accent-dark to re-theme; all other roles are fixed materials. -->`;
+  const style=S.mode==='vars'?`<style>#${sid}{${roles.map(r=>`--${r}:${g.pal[r]}`).join(';')}}</style>`:'';
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="${sid}" viewBox="0 0 480 480" width="${size}" height="${size}" role="img" aria-label="${a.name}">${head}<title>${a.name}</title>${style}${body}</svg>`;
+}
+const ICON={dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>',code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-5 4 5 4M16 8l5 4-5 4"/></svg>',tick:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'};
+
+function setBrand(hex){
+  S.brand=hex.toLowerCase();$('#hex').value=S.brand;$('#picker').value=S.brand;
+  buildSwatches();buildRoles();render();
+}
+function buildSwatches(){
+  const el=$('#swatches');el.innerHTML='';
+  PRESETS.forEach(p=>{const b=document.createElement('button');b.className='swatch'+(S.brand===p?' on':'');b.style.background=p;b.title=p;b.onclick=()=>setBrand(p);el.appendChild(b)});
+}
+function buildRoles(){
+  const p=palette(S.brand);
+  $('#roles').innerHTML=['brand-accent','accent-light','accent-dark'].map(r=>`<div class="role"><i style="background:${p[r]}"></i>${r}</div>`).join('');
+}
+function seg(el,opts,get,set){
+  el.innerHTML='';opts.forEach(([v,l])=>{const b=document.createElement('button');b.textContent=l;b.className=get()===v?'on':'';b.onclick=()=>{set(v);seg(el,opts,get,set)};el.appendChild(b)});
+}
+function buildCats(){
+  const el=$('#cats');el.innerHTML='';const counts={};SHOWN().forEach(a=>counts[a.cat]=(counts[a.cat]||0)+1);
+  [['All',SHOWN().length],...Object.entries(counts)].forEach(([c,n])=>{const b=document.createElement('button');b.className='chip'+(S.cat===c?' on':'');b.innerHTML=`${c}<small>${n}</small>`;b.onclick=()=>{S.cat=c;buildCats();render()};el.appendChild(b)});
+}
+const SHOWN=()=>ASSETS.filter(a=>!a.hidden);
+function visible(){const q=S.q.trim().toLowerCase();return SHOWN().filter(a=>(S.cat==='All'||a.cat===S.cat)&&(!q||(a.name+' '+a.cat+' '+a.tags.join(' ')).toLowerCase().includes(q)))}
+function render(){
+  const g=$('#grid');g.className='bg-'+S.bg;g.innerHTML='';
+  $('#lede').textContent=`${SHOWN().length} Christmas illustrations. Each SVG uses named colour roles, so one brand colour re-themes the artwork while the materials stay fixed.`;const list=visible();$('#count').textContent=`${list.length} illustration${list.length===1?'':'s'}`;
+  if(!list.length){g.innerHTML='<div class="empty">Nothing matches. Try another word or category.</div>';updateDock();renderSizes();return}
+  list.forEach(a=>{
+    const d=document.createElement('div');d.className='item'+(S.sel.has(a.id)?' sel':'');
+    d.innerHTML=`<div class="tile"><div class="check">${ICON.tick}</div><div class="acts"><button data-act="copy" title="Copy SVG code" aria-label="Copy SVG code">${ICON.code}</button><button data-act="dl" title="Download ${S.fmt.toUpperCase()}" aria-label="Download">${ICON.dl}</button></div>${inlineSvg(a,'t-'+a.id)}</div><div class="cap"><b>${a.name}</b><span>${a.cat}</span></div>`;
+    d.querySelector('.tile').onclick=e=>{const act=e.target.closest('button')?.dataset.act;if(act==='dl'){downloadList([a]);return}if(act==='copy'){copySvg(a);return}
+      S.sel.has(a.id)?S.sel.delete(a.id):S.sel.add(a.id);d.classList.toggle('sel',S.sel.has(a.id));updateDock()};
+    g.appendChild(d);
+  });
+  updateDock();renderSizes();
+}
+function renderSizes(){
+  const el=$('#panels');
+  const mk=(theme)=>{const rows=[[112,'Hero'],[72,'Card'],[40,'Inline']];
+    return `<div class="panel ${theme}"><h3>${theme==='light'?'On light':'On dark'}</h3>${rows.map(([sz,lab])=>`<div class="srow"><span class="tag">${lab} ${sz}px</span>${SHOWN().map(a=>`<figure><div style="width:${sz}px;height:${sz}px">${inlineSvg(a,`s${theme[0]}${sz}-${a.id}`,`width="${sz}" height="${sz}"`)}</div></figure>`).join('')}</div>`).join('')}</div>`};
+  el.innerHTML=mk('light')+mk('dark');
+}
+function updateDock(){const n=S.sel.size;$('#dock').classList.toggle('show',n>0);$('#dn').textContent=`${n} selected`;$('#dl').textContent=`Download ${S.fmt.toUpperCase()}${n>1?' (zip)':''}`}
+let tt;function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2600)}
+
+/* ================= export ================= */
+function svgToPng(str,size){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=size;cv.getContext('2d').drawImage(img,0,0,size,size);cv.toBlob(b=>b?res(b):rej(new Error('PNG failed')),'image/png')};img.onerror=()=>rej(new Error('Render failed'));img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(str)})}
+async function saveFile(filename,data){let d=null;try{if(window.claude&&claude.use)d=await claude.use('downloads')}catch(e){}
+  if(d){await d.save({filename,data});return}
+  const url=URL.createObjectURL(data instanceof Blob?data:new Blob([data]));const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+async function fileFor(a){const str=svgFile(a,S.size);return S.fmt==='svg'?{name:a.id+'.svg',data:str}:{name:a.id+'.png',data:await svgToPng(str,S.size)}}
+async function downloadList(list){try{toast('Preparing…');
+  if(list.length===1){const f=await fileFor(list[0]);await saveFile(f.name,f.data)}
+  else{if(!window.JSZip)throw new Error('Zip library did not load');const z=new JSZip();for(const a of list){const f=await fileFor(a);z.file(f.name,f.data)}await saveFile(`seasonal-illustrations-${list.length}.zip`,await z.generateAsync({type:'blob'}))}
+  toast('Done')}catch(e){toast(e&&e.code==='declined'?'Download cancelled':'Could not download: '+(e.message||e.code||'error'))}}
+async function copySvg(a){try{await navigator.clipboard.writeText(svgFile(a,S.size));toast(`Copied ${a.name} SVG`)}catch(e){toast('Copy is blocked here. Use download.')}}
+
+/* ================= wiring ================= */
+$('#q').oninput=e=>{S.q=e.target.value;render()};
+$('#hex').oninput=e=>{let v=e.target.value.trim();if(v[0]!=='#')v='#'+v;if(/^#[0-9a-f]{6}$/i.test(v))setBrand(v)};
+$('#picker').oninput=e=>setBrand(e.target.value);
+$('#size').onchange=e=>{S.size=+e.target.value};
+$('#shadow').onchange=e=>{S.shadow=e.target.checked;render()};
+$('#texture').onchange=e=>{S.texture=e.target.checked;render()};
+$('#selAll').onclick=()=>{const l=visible();const all=l.every(a=>S.sel.has(a.id));l.forEach(a=>all?S.sel.delete(a.id):S.sel.add(a.id));render()};
+$('#dclear').onclick=()=>{S.sel.clear();render()};
+$('#dl').onclick=()=>downloadList(SHOWN().filter(a=>S.sel.has(a.id)));
+seg($('#fmt'),[['svg','SVG'],['png','PNG']],()=>S.fmt,v=>{S.fmt=v;updateDock()});
+seg($('#bgsw'),[['light','Light'],['dark','Dark'],['check','Transparent']],()=>S.bg,v=>{S.bg=v;render()});
+const MODE_NOTE={flat:'Fixed hex colours. Best for Figma, Illustrator and other design tools.',vars:'CSS variables, one per role. Best for theming in code.'};
+seg($('#mode'),[['flat','Flat hex'],['vars','CSS variables']],()=>S.mode,v=>{S.mode=v;$('#modenote').textContent=MODE_NOTE[v]});
+$('#modenote').textContent=MODE_NOTE.flat;
+setBrand(S.brand);buildCats();
+</script>
+</body>
+</html>
